@@ -73,7 +73,7 @@ function Home() {
           </nav>
           <Button asChild size="sm">
             <Link to="/enter">
-              Open workspace
+              Open the house
               <ArrowRight className="size-4" />
             </Link>
           </Button>
@@ -92,16 +92,15 @@ function Home() {
             Lakeside fish house OS
           </p>
           <h1 className="aqua-rise aqua-delay-1 mt-4 max-w-3xl font-display text-5xl leading-[1.05] text-cream italic sm:text-7xl">
-            From the landing to the last sale.
+            From the landing jetty to the last receipt.
           </h1>
           <p className="aqua-rise aqua-delay-2 mt-5 max-w-xl text-base text-lilac sm:text-lg">
-            Aqua is the cream-and-plum ledger for Kenyan fish houses — stock, M-Pesa, SMS
-            alerts, and a scannable trail from beach to counter.
+            Aqua is the live ledger for Kenyan fish houses — ice, till, SMS updates, and a traceable line from beach to buyer.
           </p>
           <div className="aqua-rise aqua-delay-3 mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" variant="cream">
-              <Link to="/enter">
-                Enter the desk
+              <Link to="/app">
+                Open the desk
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -147,12 +146,12 @@ function Home() {
           <div className="lg:col-span-5">
             <p className="text-[11px] font-medium tracking-[0.22em] text-muted uppercase">Why Aqua</p>
             <h2 className="mt-2 font-display text-4xl text-plum-deep italic sm:text-5xl">
-              Built for the beach, not a supermarket back office.
+              Built for the beach, not a city office.
             </h2>
           </div>
           <p className="lg:col-span-6 lg:col-start-7 text-base text-ink-soft">
-            Notebooks drown, M-Pesa sits in a different pile, and a hotel cannot tell you which boat
-            landed the ngege. Aqua keeps one current: the ice hold, the till, and the trail.
+            A notebook gets lost, M-Pesa sits in one pile, and the hotel cannot tell which boat landed
+            the ngege. Aqua keeps one live flow: the ice, the till, and the trail.
           </p>
         </div>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -203,11 +202,11 @@ function Home() {
           <div>
             <p className="text-[11px] font-medium tracking-[0.22em] text-muted uppercase">Traceability</p>
             <h2 className="mt-2 font-display text-4xl text-plum-deep italic sm:text-5xl">
-              Scan a crate. See the beach.
+              Scan a batch. See the beach.
             </h2>
             <p className="mt-4 text-ink-soft">
-              Try a live batch from Dunga. Hotels, county officers, and walk-in counters all land on
-              the same public trail — no login.
+              Try a live batch from Dunga. Hotels, county officers, and counters all land on the same
+              public trail — no login, no guesswork.
             </p>
             <form
               className="mt-6 flex flex-col gap-3 sm:flex-row"
@@ -243,7 +242,7 @@ function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <p className="text-[11px] font-medium tracking-[0.22em] text-muted uppercase">Three desks</p>
           <h2 className="mt-2 max-w-xl font-display text-4xl text-plum-deep italic">
-            Owner, house manager, floor — same house, different keys.
+            Owner, house manager, floor — one house, different roles.
           </h2>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {[
@@ -259,8 +258,8 @@ function Home() {
           </div>
           <div className="mt-10">
             <Button asChild size="lg">
-              <Link to="/enter">
-                Choose a desk
+              <Link to="/app">
+                Open dashboard
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
@@ -268,15 +267,57 @@ function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-border bg-plum-deep py-10 text-cream">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <AquaLogo invert size="sm" />
-          <p className="max-w-sm text-sm text-lilac">
-            Aqua keeps the lakeside fish house honest — catch, ice, till, trail.
-          </p>
-          <div className="flex items-center gap-2 text-sm text-lilac">
-            <Smartphone className="size-4" />
-            Daraja · Africa's Talking ready
+      <footer className="border-t border-border bg-plum-deep py-12 text-cream">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="grid gap-8 md:grid-cols-[1.5fr_0.9fr_0.9fr_1.3fr]">
+            <div>
+              <AquaLogo invert size="sm" />
+              <p className="mt-4 max-w-sm text-sm leading-6 text-lilac">
+                Aqua keeps the lakeside fish house honest — catch, ice, till, trail.
+              </p>
+              <div className="mt-6 flex items-center gap-2 text-sm text-lilac">
+                <Smartphone className="size-4" />
+                Mobile-first ops
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[11px] font-medium tracking-[0.22em] text-lilac uppercase">Explore</p>
+              <ul className="mt-4 space-y-3 text-sm text-cream/85">
+                <li><a href="#product" className="hover:text-lilac">Product</a></li>
+                <li><a href="#trace" className="hover:text-lilac">Traceability</a></li>
+                <li><a href="#desk" className="hover:text-lilac">The desk</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-[11px] font-medium tracking-[0.22em] text-lilac uppercase">Ops</p>
+              <ul className="mt-4 space-y-3 text-sm text-cream/85">
+                <li>Landing intake</li>
+                <li>Cold-chain alerts</li>
+                <li>Daily sales pulse</li>
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-cream/15 bg-cream/5 p-5">
+              <p className="text-[11px] font-medium tracking-[0.22em] text-lilac uppercase">Need the desk?</p>
+              <h3 className="mt-3 font-display text-2xl italic text-cream">Open the house floor.</h3>
+              <Button asChild size="sm" variant="cream" className="mt-5">
+                <Link to="/app">
+                  Open the desk
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 border-t border-cream/15 pt-5 text-sm text-lilac md:flex-row md:items-center md:justify-between">
+            <p>© 2026 Aqua</p>
+            <div className="flex gap-5">
+              <a href="#product" className="hover:text-cream">Privacy</a>
+              <a href="#trace" className="hover:text-cream">Terms</a>
+              <a href="#desk" className="hover:text-cream">Support</a>
+            </div>
           </div>
         </div>
       </footer>

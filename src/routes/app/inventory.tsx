@@ -65,7 +65,7 @@ function Inventory() {
       <PageHeader
         eyebrow="Ice hold"
         title="What is on the ice"
-        description="Kilos, reorder lines, and a season flag. Receive a landing to mint a batch QR."
+        description="Kilos, reorder lines, and the season flag. Receive a landing to mint a batch QR."
         action={
           canMutateStock(role) ? (
             <Button onClick={() => setOpen(true)}>Receive landing</Button>

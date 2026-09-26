@@ -15,7 +15,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Aqua is the lakeside fish house operating system — inventory, M-Pesa, SMS alerts, and catch-to-sale traceability.",
+          "Aqua is the Kenyan fish house operating system — ice, stock, M-Pesa, SMS alerts, and a trace from landing to buyer.",
       },
       { name: "theme-color", content: "#3d2463" },
     ],

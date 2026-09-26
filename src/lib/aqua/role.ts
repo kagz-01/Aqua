@@ -9,12 +9,12 @@ export const ROLE_META: Record<
 > = {
   owner: {
     title: "Owner",
-    desk: "Full house",
+    desk: "Owner desk",
     blurb: "Payments, reports, alerts, and every till.",
   },
   manager: {
     title: "House manager",
-    desk: "Stock & books",
+    desk: "House manager desk",
     blurb: "Inventory, batches, cold chain, and the daily pulse.",
   },
   floor: {

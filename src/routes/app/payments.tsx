@@ -32,8 +32,8 @@ function Payments() {
     <div>
       <PageHeader
         eyebrow="M-Pesa"
-        title="Till and the phone"
-        description="Every STK and cash note in one reconciliation. Pending rows wait on Daraja."
+        title="Cash and the phone"
+        description="Every STK push and cash sale in one reconciliation. Pending rows wait on the till line."
       />
       <div className="grid gap-3 sm:grid-cols-3">
         <Card>

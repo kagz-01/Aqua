@@ -33,7 +33,7 @@ function Alerts() {
     mutationFn: () =>
       sendAlert({ data: { channel, kind, recipientCode: to, message } }),
     onSuccess: async () => {
-      toast.success("Queued on the SMS desk");
+      toast.success(`Queued on ${channel.toUpperCase()} desk`);
       setMessage("");
       await qc.invalidateQueries({ queryKey: ["notes"] });
     },
@@ -43,9 +43,9 @@ function Alerts() {
   return (
     <div>
       <PageHeader
-        eyebrow="SMS desk"
-        title="Reach a feature phone"
-        description="Low stock, payments, and the daily pulse leave this desk as SMS, WhatsApp, or USSD."
+        eyebrow="Messaging desk"
+        title="Reach the house by channel"
+        description="Low stock, payments, and the daily pulse move out through SMS, WhatsApp, or email for a Kenyan fish house."
       />
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -77,7 +77,7 @@ function Alerts() {
                 <SelectContent>
                   <SelectItem value="sms">SMS</SelectItem>
                   <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                  <SelectItem value="ussd">USSD</SelectItem>
+                  <SelectItem value="email">Email</SelectItem>
                 </SelectContent>
               </Select>
             </div>

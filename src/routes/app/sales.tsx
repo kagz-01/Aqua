@@ -80,8 +80,8 @@ function SalesFloor() {
     <div>
       <PageHeader
         eyebrow="Sales floor"
-        title="Write a sale"
-        description="Lines pull FIFO from the oldest crate. M-Pesa sends an STK, then the book closes itself."
+        title="Record the sale"
+        description="The line pulls FIFO from the oldest crate. M-Pesa sends an STK, and the book closes itself."
       />
 
       <div className="grid gap-4 lg:grid-cols-12">

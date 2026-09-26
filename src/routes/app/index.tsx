@@ -26,9 +26,9 @@ function Pulse() {
   return (
     <div>
       <PageHeader
-        eyebrow="Pulse"
-        title="This morning on the till"
-        description="Fourteen-day current, ice that is running thin, and a three-day demand read."
+        eyebrow="House pulse"
+        title="This morning at the till"
+        description="The last two weeks, the ice moving thin, and the next few days of demand."
         action={
           <Button asChild>
             <Link to="/app/sales">

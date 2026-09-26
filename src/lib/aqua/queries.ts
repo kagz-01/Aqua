@@ -665,7 +665,7 @@ export const addSupplier = createServerFn({ method: "POST" })
 export const sendAlert = createServerFn({ method: "POST" })
   .validator((input: unknown) => {
     const d = input as { channel?: string; kind?: string; recipientCode?: string; message?: string };
-    const channel = ["sms", "whatsapp", "ussd"].includes(String(d.channel))
+    const channel = ["sms", "whatsapp", "email"].includes(String(d.channel))
       ? String(d.channel)
       : "sms";
     const kind = String(d.kind ?? "notice").slice(0, 40);

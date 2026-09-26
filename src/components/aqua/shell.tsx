@@ -36,7 +36,7 @@ const NAV = [
   { to: "/app/customers", label: "Counters", icon: Users },
   { to: "/app/suppliers", label: "Landings", icon: Boxes },
   { to: "/app/payments", label: "M-Pesa", icon: Wallet, finance: true },
-  { to: "/app/alerts", label: "SMS desk", icon: Bell },
+  { to: "/app/alerts", label: "Messaging desk", icon: Bell },
   { to: "/app/cold-chain", label: "Cold chain", icon: Thermometer },
   { to: "/app/reports", label: "Books", icon: ClipboardList, reports: true },
 ] as const;
@@ -129,6 +129,9 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm">
               <Link to="/">Home</Link>
+            </Button>
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/enter">Back to desk</Link>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
