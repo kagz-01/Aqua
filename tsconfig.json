@@ -21,8 +21,6 @@
       "vite/client",
       "node"
     ],
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
