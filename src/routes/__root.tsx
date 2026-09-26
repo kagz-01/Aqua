@@ -2,6 +2,7 @@ import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-r
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { AppProviders } from "@/components/providers";
+import { FloatingKnowledgeAssistant } from "@/components/aqua/shell";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Aqua";
@@ -20,6 +21,7 @@ export const Route = createRootRoute({
       { name: "theme-color", content: "#3d2463" },
     ],
     links: [
+      { rel: "icon", type: "image/png", href: "/favicon.png", sizes: "192x192" },
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
@@ -46,6 +48,7 @@ export const Route = createRootRoute({
         <AuthProvider>
           <AppProviders>
             <Outlet />
+            <FloatingKnowledgeAssistant />
           </AppProviders>
         </AuthProvider>
         <Scripts />
