@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Aqua",
+      "hasCanvas": false,
+      "bodyTextLen": 2260,
+      "bodyTextHash": "8e61a699f24590305fff4d136903fca9fd2a51d2d9bcabe906a06ee38e8c46d9",
+      "bodyTextPrefix": "Aqua Product Trace The desk Open workspace LAKESIDE FISH HOUSE O",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Aqua",
+      "hasCanvas": false,
+      "bodyTextLen": 2237,
+      "bodyTextHash": "478127d1f5e7c04a54931a1847d3bea18bb418c4950a78ca5954fca77240f9b4",
+      "bodyTextPrefix": "Aqua Open workspace LAKESIDE FISH HOUSE OS From the landing to t",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
