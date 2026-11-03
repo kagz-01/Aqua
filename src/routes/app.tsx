@@ -40,15 +40,23 @@ function StaffAccess() {
     );
   }
   if (isPending || role.isLoading || !user) {
-    return <main className="grid min-h-dvh place-items-center bg-cream p-6 text-sm text-muted">Checking staff access…</main>;
+    return (
+      <main className="grid min-h-dvh place-items-center bg-cream p-6 text-sm text-muted">
+        Checking staff access…
+      </main>
+    );
   }
   if (role.isError) {
     return (
       <main className="grid min-h-dvh place-items-center bg-cream p-6">
         <Card className="max-w-md">
           <h1 className="font-display text-2xl italic text-plum-deep">Could not verify access</h1>
-          <p className="mt-2 text-sm text-muted">Please retry. Staff pages stay locked until access is confirmed.</p>
-          <Button className="mt-4" onClick={() => void role.refetch()}>Retry</Button>
+          <p className="mt-2 text-sm text-muted">
+            Please retry. Staff pages stay locked until access is confirmed.
+          </p>
+          <Button className="mt-4" onClick={() => void role.refetch()}>
+            Retry
+          </Button>
         </Card>
       </main>
     );
@@ -58,9 +66,9 @@ function StaffAccess() {
       <main className="grid min-h-dvh place-items-center bg-cream p-6">
         <Card className="max-w-md text-center">
           <h1 className="font-display text-2xl italic text-plum-deep">Staff access required</h1>
-          <p className="mt-2 text-sm text-muted">This workspace is for approved fish-house staff.</p>
+          <p className="mt-2 text-sm text-muted">Only staff with access can use these pages.</p>
           <Button asChild className="mt-4">
-            <Link to="/client">Go to the customer shop</Link>
+            <Link to="/client">Shop for fish</Link>
           </Button>
         </Card>
       </main>

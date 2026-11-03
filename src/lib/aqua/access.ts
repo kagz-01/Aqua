@@ -2,9 +2,8 @@ import { createMiddleware } from "@tanstack/react-start";
 import { authMiddleware } from "@/lib/auth/middleware";
 import type { AquaRole } from "./role";
 
-const STAFF_ROLES: AquaRole[] = ["owner", "manager", "floor"];
-const LOCAL_DEMO_MODE =
-  import.meta.env.DEV && import.meta.env.VITE_AUTH_ENABLED === "false";
+const STAFF_ROLES: AquaRole[] = ["owner", "manager", "floor", "accounts"];
+const LOCAL_DEMO_MODE = import.meta.env.DEV && import.meta.env.VITE_AUTH_ENABLED === "false";
 
 export function staffOnly(allowed: AquaRole[] = STAFF_ROLES) {
   if (LOCAL_DEMO_MODE) {

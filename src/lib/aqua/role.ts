@@ -1,26 +1,28 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type AquaRole = "owner" | "manager" | "floor";
+export type AquaRole = "owner" | "manager" | "floor" | "accounts";
 
-export const ROLE_META: Record<
-  AquaRole,
-  { title: string; desk: string; blurb: string }
-> = {
+export const ROLE_META: Record<AquaRole, { title: string; desk: string; blurb: string }> = {
   owner: {
     title: "Owner",
-    desk: "Owner desk",
-    blurb: "Payments, reports, alerts, and every till.",
+    desk: "Business overview",
+    blurb: "See sales, payments, reports, and staff access.",
   },
   manager: {
     title: "House manager",
-    desk: "House manager desk",
-    blurb: "Inventory, batches, cold chain, and the daily pulse.",
+    desk: "Fish house",
+    blurb: "Receive fish, check stock, and prepare shop orders.",
   },
   floor: {
     title: "Floor attendant",
-    desk: "Sales floor",
-    blurb: "Weigh-in, record a sale, send an STK push.",
+    desk: "Sales and pickups",
+    blurb: "Record sales and hand over shop orders.",
+  },
+  accounts: {
+    title: "Accounts officer",
+    desk: "Accounts",
+    blurb: "Check customer payments and pay fishers.",
   },
 };
 
@@ -40,7 +42,7 @@ export const useAquaRole = create<RoleState>()(
 );
 
 export function canSeeFinance(role: AquaRole) {
-  return role === "owner" || role === "manager";
+  return role === "owner" || role === "accounts";
 }
 
 export function canMutateStock(role: AquaRole) {
@@ -48,5 +50,5 @@ export function canMutateStock(role: AquaRole) {
 }
 
 export function canSeeReports(role: AquaRole) {
-  return role === "owner" || role === "manager";
+  return role === "owner" || role === "manager" || role === "accounts";
 }

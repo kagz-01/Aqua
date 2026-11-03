@@ -1,21 +1,35 @@
-import { r as __exportAll } from "../_runtime.mjs";
+import { r as __exportAll$1 } from "../_runtime.mjs";
 import { s as require_jsx_runtime } from "../_libs/@radix-ui/react-collection+[...].mjs";
 import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 import { E as fromJSON, F as resolveManifestCssLink, G as isRedirect, H as isDangerousProtocol, I as waitForReason, J as isNotFound, K as parseRedirect, L as _getRenderedMatches, M as getScriptPreloadAttrs, N as getStylesheetHref, O as toCrossJSONAsync, P as resolveManifestAssetLink, R as executeRewriteInput, U as isPromise, a as isSsrResponse, c as stripSsrResponseBody, i as disposeSsrResponse, k as toCrossJSONStream, m as RouterProvider, n as bindSsrResponseToRequest, o as normalizeSsrResponse, q as rootRouteId, r as defineHandlerCallback, s as replaceSsrResponse, t as renderRouterToStream, z as invariant } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as createServerHistory } from "../_libs/tanstack__history.mjs";
 import { a as defaultSerovalDeserializerPlugins, i as createRawStreamRPCPlugin, n as attachRouterServerSsrUtils, o as makeSerovalPlugin, r as getNormalizedURL, s as createSerializationAdapter, t as mergeHeaders } from "../_libs/@tanstack/router-core+[...].mjs";
-import { n as toResponse, t as H3Event } from "../_libs/h3-v2+rou3.mjs";
+import { n as setCookie, r as toResponse, t as H3Event } from "../_libs/h3-v2+rou3.mjs";
 import { AsyncLocalStorage } from "node:async_hooks";
 //#region node_modules/.nitro/vite/services/ssr/index.js
-var ssr_exports = /* @__PURE__ */ __exportAll({
+var ssr_exports = /* @__PURE__ */ __exportAll$1({
+	a: () => getServerFnById,
 	createServerEntry: () => createServerEntry,
 	default: () => server_default,
-	n: () => TSS_SERVER_FUNCTION,
-	r: () => getServerFnById,
-	t: () => createServerFn
+	i: () => TSS_SERVER_FUNCTION,
+	n: () => createMiddleware,
+	o: () => getRequest,
+	r: () => createServerFn,
+	s: () => __exportAll,
+	t: () => server_exports
 });
 require_react();
 var import_jsx_runtime = require_jsx_runtime();
+var __defProp = Object.defineProperty;
+var __exportAll = (all, no_symbols) => {
+	let target = {};
+	for (var name in all) __defProp(target, name, {
+		get: all[name],
+		enumerable: true
+	});
+	if (!no_symbols) __defProp(target, Symbol.toStringTag, { value: "Module" });
+	return target;
+};
 function StartServer(props) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RouterProvider, { router: props.router });
 }
@@ -75,6 +89,21 @@ function getH3Event() {
 	if (!event) throw new Error(`No StartEvent found in AsyncLocalStorage. Make sure you are using the function within the server runtime.`);
 	return event.h3Event;
 }
+function getRequest() {
+	return getH3Event().req;
+}
+/**
+* Set a cookie value by name.
+* @param name Name of the cookie to set
+* @param value Value of the cookie to set
+* @param options {CookieSerializeOptions} Options for serializing the cookie
+* ```ts
+* setCookie('Authorization', '1234567')
+* ```
+*/
+function setCookie$1(name, value, options) {
+	setCookie(getH3Event(), name, value, options);
+}
 function getResponse() {
 	return getH3Event().res;
 }
@@ -89,7 +118,7 @@ var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 * the dev styles URL for route-scoped CSS collection.
 */
 async function getStartManifest(matchedRoutes) {
-	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-CB6RkNQ8.mjs");
+	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-BScp3EqM.mjs");
 	const startManifest = tsrStartManifest();
 	let routes = startManifest.routes;
 	routes[rootRouteId];
@@ -109,77 +138,117 @@ async function getStartManifest(matchedRoutes) {
 	};
 }
 var manifest = {
+	"066d8e4f4a094abcdd28d9adf010381a45b6eebc43025dbfda358a2580ec7083": {
+		functionName: "recordSupplierPayment_createServerFn_handler",
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"118c4c9eb792b00951c5d6260f40f611a5d82102f56bbf3ef841d16491b9f83a": {
+		functionName: "listMyOrders_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
+	},
 	"12d734c6a98ed653488a53dc0e2bc38681612b4a2395d944ce469d07584b65b9": {
 		functionName: "getOverview_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"14aab18e3b934e891a808fb63315a7845d6108cc422ef9b0094dbb3d5aedd15f": {
 		functionName: "listSales_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"23440e03719eb48e11b9791927eac492bec8f1711e90f44b6be46169e472b5cb": {
 		functionName: "getBatchByCode_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
-	},
-	"3ec47c4ddad9eb1ef62141f7bd2254f321320b0bbcaa271ba670fa965d24afdb": {
-		functionName: "receiveDelivery_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"3ed0977becbc433f1b58569707d6ccbe0ca63c0cf9e96e8665d8bb0438eeb0c0": {
 		functionName: "listSuppliers_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"4f899b12f66b963d4d9e9e82e0c8b29bc99b638d2353bf2779cb4bec33b33aff": {
+		functionName: "placeCustomerOrder_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
+	},
+	"4fa447cf3968e78fb9f81aaee7ff1b8ab2619e877838078eb0a8bdc70d844b89": {
+		functionName: "recordDelivery_createServerFn_handler",
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"5787c02d6a2b4ba932d116b87e09ea74cb02b08edb542036d557eb348b0bab3c": {
 		functionName: "listBatches_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"58c0847d22c5194cfdce4aacc0a89afb315083e2cab293172f28ba8898536055": {
 		functionName: "sendAlert_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"5d8e6e7f3dbf3d9ee3ffd97daceef6d65920fb03093b5a5cf074449e92f81134": {
+		functionName: "updateCustomerOrderStatus_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
 	},
 	"613e8ceaa06311e19d9f18ece7272017032a127ea18f451ef70b46d4604b28bb": {
 		functionName: "addSupplier_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"6abb8b7caafdc8f5677197e19d2c69617c995d61aa670b0edd3c7c1aa0d09faa": {
 		functionName: "tickSensors_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"6b0c69748ac610bb57d4c29831f4f54f940611bd3aa53d653da61a5d8a9b6260": {
+		functionName: "listAllCustomerOrders_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
+	},
+	"6f4c0566a0787963c81c15b6a5e147bb54d2475ab22de7efe67ef7fcad2f515c": {
+		functionName: "setStaffRole_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
 	},
 	"6ffe2c5a49f446b0b7f32672c9f699ada0913c0146cc18b6656ff41b24b6dcff": {
 		functionName: "listPayments_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"727d8df869eb57100b3ed075d40da1d88f8356db5b27806bb77d78dfced855a3": {
 		functionName: "listSensors_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"8193c7174700be4ef0ac64aad479a05f2913eefa6c0a9c6e8f2e38c7c88c36e3": {
+		functionName: "listTeamUsers_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
 	},
 	"8bf560ef759d51747981f8d39c58367765e8bd1571f00cbe5959a240b86378e6": {
 		functionName: "weighIn_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"9c7c88a15a4877d44bee063e40c7d22a90289ad1e8ffc6615b3b5fe03ef7e7bb": {
 		functionName: "listCustomers_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"9f02d334170cad31c0092a497630dfc9978b93b6fff9ea4283ff7e7ecd7b7790": {
 		functionName: "confirmMpesa_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"9f81c332a1d56f9e94c30b3447399f3a5bff0c0b4d4e62110510bbc6c5e1d7cf": {
 		functionName: "recordSale_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"a65823d9c2e5ee27cf72e9e0b1083e4bb74e2be7d148499f1ba19612db3ce8c2": {
+		functionName: "listDeliveries_createServerFn_handler",
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"a88840cb3ae15598d85b7964340d0c740f6293d45241a09817f763a3d2406940": {
+		functionName: "claimOwnerAccess_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
 	},
 	"d26e736e03a03cfa6a0169c5d5e7601b1933b6f2f6d19ee5e1ba213e442077e7": {
 		functionName: "addCustomer_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
+	},
+	"d4633da6f47cbc47bf148fdaa96fc957c48b67691e4d8b0322f7a8b6ff8787ec": {
+		functionName: "getMyAquaRole_createServerFn_handler",
+		importer: () => import("./market-o12Ye6Fe.mjs")
 	},
 	"d6d371886f182e6efbb376d8aa8a0fac4fd6beffdb71eb468425909a539d9087": {
 		functionName: "listNotifications_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	},
 	"dd01b07e155d845c1dd94c6c5f550b3c1c39316557936cefc6d57164dcc1c864": {
 		functionName: "listFish_createServerFn_handler",
-		importer: () => import("./queries-C_rHQqH1.mjs")
+		importer: () => import("./queries-EgyhXneL.mjs")
 	}
 };
 async function getServerFnById(id, access) {
@@ -1573,7 +1642,7 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-CVqZE3rt.mjs").then((n) => n.t),
+		import("./router-COQ49zTk.mjs").then((n) => n.t),
 		import("./start-5Z2QO8AU.mjs"),
 		import("./empty-plugin-adapters-D9UWiqvJ.mjs")
 	]);
@@ -2016,6 +2085,7 @@ async function handleServerRoutes({ getRouter, request, url, executeRouter, cont
 		handlerType: "router"
 	}, request.signal, terminalNext));
 }
+var server_exports = /* @__PURE__ */ __exportAll({ setCookie: () => setCookie$1 });
 var fetch = createStartHandler(defaultStreamHandler);
 function createServerEntry(entry) {
 	return { async fetch(...args) {
@@ -2024,4 +2094,4 @@ function createServerEntry(entry) {
 }
 var server_default = createServerEntry({ fetch });
 //#endregion
-export { createServerEntry, server_default as default, ssr_exports as i, TSS_SERVER_FUNCTION as n, getServerFnById as r, createServerFn as t };
+export { getServerFnById as a, ssr_exports as c, createServerEntry, server_default as default, TSS_SERVER_FUNCTION as i, createMiddleware as n, getRequest as o, createServerFn as r, __exportAll as s, server_exports as t };

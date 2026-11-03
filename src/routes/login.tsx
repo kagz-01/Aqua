@@ -37,13 +37,19 @@ function Login() {
       <main className="grid min-h-dvh place-items-center bg-cream p-6">
         <Card className="w-full max-w-md text-center">
           <AquaLogo size="sm" />
-          <h1 className="mt-5 font-display text-3xl italic text-plum-deep">Demo access is open</h1>
+          <h1 className="mt-5 font-display text-3xl italic text-plum-deep">
+            Preview access is open
+          </h1>
           <p className="mt-3 text-sm leading-6 text-muted">
-            Sign-in is switched off in this local demo. Open a workspace directly; account security remains enabled for the deployed app.
+            You can explore the customer shop and staff pages without signing in in this preview.
           </p>
           <div className="mt-5 grid gap-2 sm:grid-cols-2">
-            <Button asChild><Link to="/client">Customer shop</Link></Button>
-            <Button asChild variant="secondary"><Link to="/staff">Staff workspaces</Link></Button>
+            <Button asChild>
+              <Link to="/client">Customer shop</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <Link to="/staff">Staff pages</Link>
+            </Button>
           </div>
         </Card>
       </main>
@@ -102,7 +108,7 @@ function Login() {
             Fresh from the lake, ready for your table.
           </h1>
           <p className="mt-4 max-w-md text-sm leading-6 text-lilac">
-            Create an account to place an order and follow it from the first confirmation to pickup.
+            Create an account to order fish and follow your order until pickup.
           </p>
         </div>
         <Link
@@ -123,7 +129,7 @@ function Login() {
             {mode === "sign-up" ? "Create your account" : "Sign in"}
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Your orders stay private to your account.
+            Sign in to see the orders placed with your account.
           </p>
 
           <form onSubmit={submit} className="mt-6 space-y-4">
@@ -158,7 +164,7 @@ function Login() {
               />
             </Field>
             {mode === "sign-up" ? (
-              <Field label="Owner setup code (staff only)">
+              <Field label="Staff setup code (staff only)">
                 <Input
                   type="password"
                   autoComplete="off"
@@ -167,7 +173,7 @@ function Login() {
                   aria-describedby="setup-code-help"
                 />
                 <p id="setup-code-help" className="text-xs text-muted">
-                  Leave blank for a customer account. This code is supplied privately by the owner.
+                  Leave this blank if you are shopping. Ask the owner for the code if you are staff.
                 </p>
               </Field>
             ) : null}

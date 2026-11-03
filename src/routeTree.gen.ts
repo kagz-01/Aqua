@@ -27,6 +27,7 @@ import { Route as AppSalesRouteImport } from './routes/app/sales'
 import { Route as AppSuppliersRouteImport } from './routes/app/suppliers'
 import { Route as AppTeamRouteImport } from './routes/app/team'
 import { Route as StaffIndexRouteImport } from './routes/staff/index'
+import { Route as StaffAccountsRouteImport } from './routes/staff/accounts'
 import { Route as StaffAttendantRouteImport } from './routes/staff/attendant'
 import { Route as StaffHousemanagerRouteImport } from './routes/staff/housemanager'
 import { Route as StaffOwnerRouteImport } from './routes/staff/owner'
@@ -123,6 +124,11 @@ const StaffIndexRoute = StaffIndexRouteImport.update({
   path: '/staff/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffAccountsRoute = StaffAccountsRouteImport.update({
+  id: '/staff/accounts',
+  path: '/staff/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffAttendantRoute = StaffAttendantRouteImport.update({
   id: '/staff/attendant',
   path: '/staff/attendant',
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/app/sales': typeof AppSalesRoute
   '/app/suppliers': typeof AppSuppliersRoute
   '/app/team': typeof AppTeamRoute
+  '/staff/accounts': typeof StaffAccountsRoute
   '/staff/attendant': typeof StaffAttendantRoute
   '/staff/housemanager': typeof StaffHousemanagerRoute
   '/staff/owner': typeof StaffOwnerRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/app/sales': typeof AppSalesRoute
   '/app/suppliers': typeof AppSuppliersRoute
   '/app/team': typeof AppTeamRoute
+  '/staff/accounts': typeof StaffAccountsRoute
   '/staff/attendant': typeof StaffAttendantRoute
   '/staff/housemanager': typeof StaffHousemanagerRoute
   '/staff/owner': typeof StaffOwnerRoute
@@ -216,6 +224,7 @@ export interface FileRoutesById {
   '/app/sales': typeof AppSalesRoute
   '/app/suppliers': typeof AppSuppliersRoute
   '/app/team': typeof AppTeamRoute
+  '/staff/accounts': typeof StaffAccountsRoute
   '/staff/attendant': typeof StaffAttendantRoute
   '/staff/housemanager': typeof StaffHousemanagerRoute
   '/staff/owner': typeof StaffOwnerRoute
@@ -243,6 +252,7 @@ export interface FileRouteTypes {
     | '/app/sales'
     | '/app/suppliers'
     | '/app/team'
+    | '/staff/accounts'
     | '/staff/attendant'
     | '/staff/housemanager'
     | '/staff/owner'
@@ -267,6 +277,7 @@ export interface FileRouteTypes {
     | '/app/sales'
     | '/app/suppliers'
     | '/app/team'
+    | '/staff/accounts'
     | '/staff/attendant'
     | '/staff/housemanager'
     | '/staff/owner'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/app/sales'
     | '/app/suppliers'
     | '/app/team'
+    | '/staff/accounts'
     | '/staff/attendant'
     | '/staff/housemanager'
     | '/staff/owner'
@@ -307,6 +319,7 @@ export interface RootRouteChildren {
   ClientRoute: typeof ClientRoute
   EnterRoute: typeof EnterRoute
   LoginRoute: typeof LoginRoute
+  StaffAccountsRoute: typeof StaffAccountsRoute
   StaffAttendantRoute: typeof StaffAttendantRoute
   StaffHousemanagerRoute: typeof StaffHousemanagerRoute
   StaffOwnerRoute: typeof StaffOwnerRoute
@@ -443,6 +456,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff/accounts': {
+      id: '/staff/accounts'
+      path: '/staff/accounts'
+      fullPath: '/staff/accounts'
+      preLoaderRoute: typeof StaffAccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff/attendant': {
       id: '/staff/attendant'
       path: '/staff/attendant'
@@ -519,6 +539,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientRoute: ClientRoute,
   EnterRoute: EnterRoute,
   LoginRoute: LoginRoute,
+  StaffAccountsRoute: StaffAccountsRoute,
   StaffAttendantRoute: StaffAttendantRoute,
   StaffHousemanagerRoute: StaffHousemanagerRoute,
   StaffOwnerRoute: StaffOwnerRoute,

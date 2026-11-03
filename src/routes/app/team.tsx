@@ -21,10 +21,10 @@ function TeamAccess() {
   const currentUser = useCurrentUser();
   const users = useQuery({ queryKey: ["aqua-team"], queryFn: () => listTeamUsers() });
   const updateRole = useMutation({
-    mutationFn: (data: { userId: string; role: "manager" | "floor" | null }) =>
+    mutationFn: (data: { userId: string; role: "manager" | "floor" | "accounts" | null }) =>
       setStaffRole({ data }),
     onSuccess: async () => {
-      toast.success("Account access updated");
+      toast.success("Staff access updated");
       await queryClient.invalidateQueries({ queryKey: ["aqua-team"] });
     },
     onError: (error: Error) => toast.error(error.message),
@@ -33,22 +33,28 @@ function TeamAccess() {
   return (
     <div>
       <PageHeader
-        eyebrow="Owner desk"
-        title="Team access"
-        description="Only approved manager and floor accounts can use the staff workspace. New accounts start as customers."
+        eyebrow="Owner"
+        title="Choose what each staff member can do"
+        description="Give staff access to fish-house work, sales, or accounts. New sign-ups can shop as customers."
       />
       {users.isLoading ? (
-        <Card><p className="text-sm text-muted">Loading accounts…</p></Card>
+        <Card>
+          <p className="text-sm text-muted">Loading people…</p>
+        </Card>
       ) : users.isError ? (
-        <Card><p role="alert" className="text-sm text-danger">Accounts could not be loaded.</p></Card>
+        <Card>
+          <p role="alert" className="text-sm text-danger">
+            We could not load the people list. Try again.
+          </p>
+        </Card>
       ) : (
         <Card className="overflow-x-auto">
           <table className="w-full min-w-[36rem] text-left text-sm">
             <thead className="text-xs uppercase tracking-wide text-muted">
               <tr>
-                <th className="pb-3 font-medium">Account</th>
-                <th className="pb-3 font-medium">Access</th>
-                <th className="pb-3 text-right font-medium">Change access</th>
+                <th className="pb-3 font-medium">Person</th>
+                <th className="pb-3 font-medium">Their role</th>
+                <th className="pb-3 text-right font-medium">Change role</th>
               </tr>
             </thead>
             <tbody>
@@ -63,12 +69,18 @@ function TeamAccess() {
                     </td>
                     <td className="py-3">
                       <Badge variant={isOwner ? "ok" : account.role ? "warn" : "outline"}>
-                        {account.role === "floor" ? "Floor attendant" : account.role ?? "Customer"}
+                        {account.role === "floor"
+                          ?                           "Sales attendant"
+                          : account.role === "accounts"
+                            ?                             "Accounts"
+                            : account.role === "manager"
+                              ? "House manager"
+                              : (account.role ?? "Customer")}
                       </Badge>
                     </td>
                     <td className="py-3 text-right">
                       {isOwner ? (
-                        <span className="text-xs text-muted">Protected owner</span>
+                        <span className="text-xs text-muted">Owner access</span>
                       ) : (
                         <Select
                           value={account.role ?? "customer"}
@@ -76,7 +88,10 @@ function TeamAccess() {
                           onValueChange={(value) =>
                             updateRole.mutate({
                               userId: account.id,
-                              role: value === "customer" ? null : value as "manager" | "floor",
+                              role:
+                                value === "customer"
+                                  ? null
+                                  : (value as "manager" | "floor" | "accounts"),
                             })
                           }
                         >
@@ -84,9 +99,10 @@ function TeamAccess() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="customer">Customer only</SelectItem>
+                            <SelectItem value="customer">Customer</SelectItem>
                             <SelectItem value="manager">House manager</SelectItem>
                             <SelectItem value="floor">Floor attendant</SelectItem>
+                            <SelectItem value="accounts">Accounts officer</SelectItem>
                           </SelectContent>
                         </Select>
                       )}
@@ -97,10 +113,11 @@ function TeamAccess() {
             </tbody>
           </table>
           {users.data?.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted">No accounts have registered yet.</p>
+            <p className="py-6 text-center text-sm text-muted">No one has signed up yet.</p>
           ) : null}
           <p className="mt-4 border-t border-border pt-3 text-xs leading-5 text-muted">
-            The owner account cannot be changed here. Customers must first create an account before staff access can be assigned.
+            You cannot change the owner's access here. A person must sign up before you can give
+            them a staff role.
           </p>
         </Card>
       )}

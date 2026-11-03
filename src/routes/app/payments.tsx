@@ -31,32 +31,38 @@ function Payments() {
   return (
     <div>
       <PageHeader
-        eyebrow="M-Pesa"
-        title="Cash and the phone"
-        description="Every STK push and cash sale in one reconciliation. Pending rows wait on the till line."
+        eyebrow="Payments"
+        title="Check customer payments"
+        description="Compare receipts with cash and M-Pesa received. The M-Pesa check here is a demo only; it does not contact Safaricom."
       />
       <div className="grid gap-3 sm:grid-cols-3">
         <Card>
-          <p className="text-[11px] tracking-wider text-muted uppercase">M-Pesa in</p>
-          <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">{kes(mpesa)}</p>
+          <p className="text-[11px] tracking-wider text-muted uppercase">M-Pesa received</p>
+          <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">
+            {kes(mpesa)}
+          </p>
         </Card>
         <Card>
-          <p className="text-[11px] tracking-wider text-muted uppercase">Cash in</p>
-          <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">{kes(cash)}</p>
+          <p className="text-[11px] tracking-wider text-muted uppercase">Cash received</p>
+          <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">
+            {kes(cash)}
+          </p>
         </Card>
         <Card>
-          <p className="text-[11px] tracking-wider text-muted uppercase">Waiting</p>
-          <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">{pending.length}</p>
+          <p className="text-[11px] tracking-wider text-muted uppercase">Still to check</p>
+          <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">
+            {pending.length}
+          </p>
         </Card>
       </div>
       <Card className="mt-4 overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead className="text-[11px] tracking-wider text-muted uppercase">
             <tr>
-              <th className="pb-2 font-medium">When</th>
+              <th className="pb-2 font-medium">Date</th>
               <th className="pb-2 font-medium">Receipt</th>
-              <th className="pb-2 font-medium">Method</th>
-              <th className="pb-2 font-medium">Ref</th>
+              <th className="pb-2 font-medium">Paid by</th>
+              <th className="pb-2 font-medium">M-Pesa code</th>
               <th className="pb-2 text-right font-medium">Amount</th>
               <th className="pb-2" />
             </tr>
@@ -86,7 +92,7 @@ function Payments() {
                       disabled={confirm.isPending}
                       onClick={() => confirm.mutate(p.saleId)}
                     >
-                      Confirm STK
+                      Mark demo payment as checked
                     </Button>
                   )}
                 </td>

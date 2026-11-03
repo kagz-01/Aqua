@@ -1,7 +1,7 @@
 import { getSql } from "@/lib/db";
 import type { AquaRole } from "./role";
 
-const STAFF_ROLES: AquaRole[] = ["owner", "manager", "floor"];
+const STAFF_ROLES: AquaRole[] = ["owner", "manager", "floor", "accounts"];
 
 export async function getAquaRole(userId: string): Promise<AquaRole | null> {
   const sql = await getSql();

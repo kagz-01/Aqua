@@ -30,6 +30,7 @@ export const Route = createFileRoute("/app/sales")({ component: SalesFloor });
 
 function SalesFloor() {
   const qc = useQueryClient();
+  const demoMode = import.meta.env.DEV && import.meta.env.VITE_AUTH_ENABLED === "false";
   const fish = useQuery({ queryKey: ["fish"], queryFn: () => listFish() });
   const customers = useQuery({ queryKey: ["customers"], queryFn: () => listCustomers() });
   const sales = useQuery({ queryKey: ["sales"], queryFn: () => listSales() });
@@ -59,18 +60,20 @@ function SalesFloor() {
         data: { customerId: Number(customerId), method, items },
       }),
     onSuccess: async (res) => {
-      toast.success(`Receipt ${res.receiptNo} written`);
+      toast.success(`Sale recorded · receipt ${res.receiptNo}`);
       setLines({});
       await qc.invalidateQueries();
       if (res.method === "mpesa") {
         setPhase("push");
         setStk({ saleId: res.saleId, receiptNo: res.receiptNo, total: res.total });
-        window.setTimeout(async () => {
-          const conf = await confirmMpesa({ data: { saleId: res.saleId } });
-          setMpesaRef(conf.mpesaReceipt);
-          setPhase("ok");
-          await qc.invalidateQueries();
-        }, 1800);
+        if (demoMode) {
+          window.setTimeout(async () => {
+            const conf = await confirmMpesa({ data: { saleId: res.saleId } });
+            setMpesaRef(conf.mpesaReceipt);
+            setPhase("ok");
+            await qc.invalidateQueries();
+          }, 1800);
+        }
       }
     },
     onError: (e: Error) => toast.error(e.message),
@@ -79,14 +82,14 @@ function SalesFloor() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sales floor"
-        title="Record the sale"
-        description="The line pulls FIFO from the oldest crate. M-Pesa sends an STK, and the book closes itself."
+        eyebrow="Sales"
+        title="Record a fish sale"
+        description="Choose the fish and weight, then record whether the customer paid by cash or M-Pesa. M-Pesa payments still need to be checked."
       />
 
       <div className="grid gap-4 lg:grid-cols-12">
         <Card className="lg:col-span-7">
-          <h2 className="font-display text-xl italic text-plum-deep">On the ice</h2>
+          <h2 className="font-display text-xl italic text-plum-deep">Fish in stock</h2>
           <ul className="mt-4 divide-y divide-border">
             {(fish.data ?? []).map((f) => {
               const qty = lines[f.id] ?? 0;
@@ -110,7 +113,10 @@ function SalesFloor() {
                       className="size-9"
                       aria-label={`Less ${f.name}`}
                       onClick={() =>
-                        setLines((prev) => ({ ...prev, [f.id]: Math.max(0, (prev[f.id] ?? 0) - 0.5) }))
+                        setLines((prev) => ({
+                          ...prev,
+                          [f.id]: Math.max(0, (prev[f.id] ?? 0) - 0.5),
+                        }))
                       }
                     >
                       <Minus className="size-4" />
@@ -141,10 +147,10 @@ function SalesFloor() {
           <h2 className="font-display text-xl italic text-plum-deep">Till</h2>
           <div className="mt-4 space-y-3">
             <div className="space-y-1.5">
-              <Label>Counter</Label>
+              <Label>Customer</Label>
               <Select value={customerId} onValueChange={setCustomerId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose a counter" />
+                  <SelectValue placeholder="Choose a customer" />
                 </SelectTrigger>
                 <SelectContent>
                   {(customers.data ?? []).map((c) => (
@@ -156,7 +162,7 @@ function SalesFloor() {
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Pay with</Label>
+              <Label>How did they pay?</Label>
               <div className="grid grid-cols-2 gap-2">
                 {(["mpesa", "cash"] as const).map((m) => (
                   <button
@@ -168,7 +174,7 @@ function SalesFloor() {
                       method === m ? "bg-plum text-cream" : "bg-cream text-ink",
                     )}
                   >
-                    {m === "mpesa" ? "M-Pesa STK" : "Cash"}
+                    {m === "mpesa" ? "M-Pesa" : "Cash"}
                   </button>
                 ))}
               </div>
@@ -185,21 +191,21 @@ function SalesFloor() {
               disabled={!customerId || items.length === 0 || sell.isPending}
               onClick={() => sell.mutate()}
             >
-              {method === "mpesa" ? "Send STK Push" : "Take cash"}
+              {method === "mpesa" ? "Record M-Pesa payment" : "Record cash payment"}
             </Button>
           </div>
         </Card>
       </div>
 
       <Card className="mt-4">
-        <h2 className="font-display text-xl italic text-plum-deep">Recent receipts</h2>
+        <h2 className="font-display text-xl italic text-plum-deep">Recent sales and receipts</h2>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="text-[11px] tracking-wider text-muted uppercase">
               <tr>
                 <th className="pb-2 font-medium">Receipt</th>
-                <th className="pb-2 font-medium">Counter</th>
-                <th className="pb-2 font-medium">Pay</th>
+                <th className="pb-2 font-medium">Customer</th>
+                <th className="pb-2 font-medium">Paid by</th>
                 <th className="pb-2 font-medium">Status</th>
                 <th className="pb-2 text-right font-medium">Total</th>
               </tr>
@@ -211,7 +217,9 @@ function SalesFloor() {
                   <td className="py-2.5">{s.customerCode}</td>
                   <td className="py-2.5">{paymentLabel(s.paymentMethod)}</td>
                   <td className="py-2.5">
-                    <Badge variant={s.paymentStatus === "paid" ? "ok" : "warn"}>{s.paymentStatus}</Badge>
+                    <Badge variant={s.paymentStatus === "paid" ? "ok" : "warn"}>
+                      {s.paymentStatus === "paid" ? "Paid" : "To be checked"}
+                    </Badge>
                   </td>
                   <td className="py-2.5 text-right tabular-nums">{kes(s.total)}</td>
                 </tr>
@@ -224,21 +232,29 @@ function SalesFloor() {
       <Dialog open={!!stk} onOpenChange={(o) => !o && setStk(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{phase === "push" ? "STK Push sent" : "M-Pesa confirmed"}</DialogTitle>
+            <DialogTitle>
+              {phase === "push"
+                ? demoMode
+                  ? "Demo M-Pesa payment"
+                  : "M-Pesa payment still needs checking"
+                : "Demo payment marked paid"}
+            </DialogTitle>
             <DialogDescription>
               {phase === "push"
-                ? "A prompt is on 2547•••221. Aqua is waiting for Daraja."
-                : `Receipt ${stk?.receiptNo} is closed.`}
+                ? demoMode
+                  ? "This is a demo. No money is sent or received."
+                  : "The sale is recorded, but Accounts must check the M-Pesa payment before marking it paid."
+                : `Demo payment marked paid for receipt ${stk?.receiptNo}.`}
             </DialogDescription>
           </DialogHeader>
           <div className="mx-auto w-48 rounded-[2rem] bg-ink p-3 text-cream shadow-[var(--shadow-lift)]">
             <div className="rounded-[1.4rem] bg-plum-deep p-4">
               <Smartphone className="size-5 text-lilac" />
-              <p className="mt-3 text-[10px] tracking-[0.2em] text-lilac uppercase">Safaricom</p>
+              <p className="mt-3 text-[10px] tracking-[0.2em] text-lilac uppercase">M-Pesa</p>
               <p className="mt-1 font-display text-2xl italic">
-                {phase === "push" ? "Enter PIN" : mpesaRef}
+                {phase === "push" ? (demoMode ? "Demo" : "Pending") : mpesaRef}
               </p>
-              <p className="mt-2 text-xs text-lilac">{kes(stk?.total ?? 0)} · Aqua Fish House</p>
+              <p className="mt-2 text-xs text-lilac">{kes(stk?.total ?? 0)} · Aqua Fish Market</p>
             </div>
           </div>
           {phase === "ok" ? (
@@ -246,7 +262,11 @@ function SalesFloor() {
               Done
             </Button>
           ) : (
-            <p className="text-center text-xs text-muted">Listening for the callback…</p>
+            <p className="text-center text-xs text-muted">
+              {demoMode
+                ? "Finishing demo…"
+                : "Accounts can check this payment in the Check payments page."}
+            </p>
           )}
         </DialogContent>
       </Dialog>

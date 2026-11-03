@@ -266,6 +266,38 @@ var Fish = createLucideIcon("fish", [
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var HandCoins = createLucideIcon("hand-coins", [
+	["path", {
+		d: "M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17",
+		key: "geh8rc"
+	}],
+	["path", {
+		d: "m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9",
+		key: "1fto5m"
+	}],
+	["path", {
+		d: "m2 16 6 6",
+		key: "1pfhp9"
+	}],
+	["circle", {
+		cx: "16",
+		cy: "9",
+		r: "2.9",
+		key: "1n0dlu"
+	}],
+	["circle", {
+		cx: "6",
+		cy: "5",
+		r: "3",
+		key: "151irh"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var LayoutDashboard = createLucideIcon("layout-dashboard", [
 	["rect", {
 		width: "7",
@@ -330,6 +362,37 @@ var Minus = createLucideIcon("minus", [["path", {
 	d: "M5 12h14",
 	key: "1ays0h"
 }]]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var PackageCheck = createLucideIcon("package-check", [
+	["path", {
+		d: "m16 16 2 2 4-4",
+		key: "gfu2re"
+	}],
+	["path", {
+		d: "M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14",
+		key: "e7tb2h"
+	}],
+	["path", {
+		d: "m7.5 4.27 9 5.15",
+		key: "1c824w"
+	}],
+	["polyline", {
+		points: "3.29 7 12 12 20.71 7",
+		key: "ousv84"
+	}],
+	["line", {
+		x1: "12",
+		x2: "12",
+		y1: "22",
+		y2: "12",
+		key: "a4e8g8"
+	}]
+]);
 /**
 * @license lucide-react v0.510.0 - ISC
 *
@@ -508,6 +571,50 @@ var ShieldCheck = createLucideIcon("shield-check", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var ShoppingBag = createLucideIcon("shopping-bag", [
+	["path", {
+		d: "M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z",
+		key: "hou9p0"
+	}],
+	["path", {
+		d: "M3 6h18",
+		key: "d0wm0j"
+	}],
+	["path", {
+		d: "M16 10a4 4 0 0 1-8 0",
+		key: "1ltviw"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var ShoppingCart = createLucideIcon("shopping-cart", [
+	["circle", {
+		cx: "8",
+		cy: "21",
+		r: "1",
+		key: "jimo8o"
+	}],
+	["circle", {
+		cx: "19",
+		cy: "21",
+		r: "1",
+		key: "13723u"
+	}],
+	["path", {
+		d: "M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12",
+		key: "9zh506"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Smartphone = createLucideIcon("smartphone", [["rect", {
 	width: "14",
 	height: "20",
@@ -548,6 +655,62 @@ var TriangleAlert = createLucideIcon("triangle-alert", [
 	["path", {
 		d: "M12 17h.01",
 		key: "p32p05"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var UserRoundCog = createLucideIcon("user-round-cog", [
+	["path", {
+		d: "m14.305 19.53.923-.382",
+		key: "3m78fa"
+	}],
+	["path", {
+		d: "m15.228 16.852-.923-.383",
+		key: "npixar"
+	}],
+	["path", {
+		d: "m16.852 15.228-.383-.923",
+		key: "5xggr7"
+	}],
+	["path", {
+		d: "m16.852 20.772-.383.924",
+		key: "dpfhf9"
+	}],
+	["path", {
+		d: "m19.148 15.228.383-.923",
+		key: "1reyyz"
+	}],
+	["path", {
+		d: "m19.53 21.696-.382-.924",
+		key: "1goivc"
+	}],
+	["path", {
+		d: "M2 21a8 8 0 0 1 10.434-7.62",
+		key: "1yezr2"
+	}],
+	["path", {
+		d: "m20.772 16.852.924-.383",
+		key: "htqkph"
+	}],
+	["path", {
+		d: "m20.772 19.148.924.383",
+		key: "9w9pjp"
+	}],
+	["circle", {
+		cx: "10",
+		cy: "8",
+		r: "5",
+		key: "o932ke"
+	}],
+	["circle", {
+		cx: "18",
+		cy: "18",
+		r: "3",
+		key: "1xkwt0"
 	}]
 ]);
 /**
@@ -603,4 +766,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { ArrowLeft as C, ArrowRight as S, ClipboardList as _, Thermometer as a, Boxes as b, Scale as c, QrCode as d, Plus as f, Fish as g, LayoutDashboard as h, TriangleAlert as i, Receipt as l, Menu as m, Wallet as n, Smartphone as o, Minus as p, Users as r, ShieldCheck as s, X as t, Radio as u, ChevronDown as v, Bell as x, Check as y };
+export { ChevronDown as C, ArrowRight as D, Bell as E, ArrowLeft as O, ClipboardList as S, Boxes as T, Minus as _, TriangleAlert as a, HandCoins as b, ShoppingCart as c, Scale as d, Receipt as f, PackageCheck as g, Plus as h, UserRoundCog as i, ShoppingBag as l, QrCode as m, Wallet as n, Thermometer as o, Radio as p, Users as r, Smartphone as s, X as t, ShieldCheck as u, Menu as v, Check as w, Fish as x, LayoutDashboard as y };

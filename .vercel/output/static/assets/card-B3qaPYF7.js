@@ -1,0 +1,1 @@
+import{a as e}from"./dist-DnauGsKW.js";import{n as t}from"./dist-CDC_-6nH.js";var n=e();function r({className:e,...r}){return(0,n.jsx)(`div`,{className:t(`rounded-xl bg-paper p-5 text-ink shadow-[var(--shadow-border)]`,e),...r})}export{r as t};

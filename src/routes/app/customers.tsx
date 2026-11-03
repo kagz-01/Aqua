@@ -29,7 +29,7 @@ function Customers() {
   const add = useMutation({
     mutationFn: () => addCustomer({ data: { code, kind } }),
     onSuccess: async () => {
-      toast.success("Counter added");
+      toast.success("Customer added");
       setCode("");
       await qc.invalidateQueries({ queryKey: ["customers"] });
     },
@@ -39,9 +39,9 @@ function Customers() {
   return (
     <div>
       <PageHeader
-        eyebrow="Counters"
-        title="Who buys from the ice"
-        description="Hotels, stalls, and walk-ins. Credit is a house balance — not a person’s name."
+        eyebrow="Customers"
+        title="People and businesses that buy fish"
+        description="Keep customer names and any amount they owe in one place."
       />
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -56,7 +56,7 @@ function Customers() {
                   <p className="text-xs text-muted capitalize">{c.kind}</p>
                 </div>
                 {c.creditBalance > 0 ? (
-                  <Badge variant="warn">Credit {kes(c.creditBalance)}</Badge>
+                  <Badge variant="warn">Owes {kes(c.creditBalance)}</Badge>
                 ) : (
                   <Badge variant="ok">Clear</Badge>
                 )}
@@ -65,14 +65,14 @@ function Customers() {
           </ul>
         </Card>
         <Card>
-          <h2 className="font-display text-xl italic text-plum-deep">New counter</h2>
+          <h2 className="font-display text-xl italic text-plum-deep">Add a customer</h2>
           <div className="mt-4 space-y-3">
             <div className="space-y-1.5">
-              <Label>House name</Label>
-              <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Portside Grill" />
+              <Label>Customer or business name</Label>
+              <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="e.g. Portside Grill" />
             </div>
             <div className="space-y-1.5">
-              <Label>Kind</Label>
+              <Label>Customer type</Label>
               <Select value={kind} onValueChange={setKind}>
                 <SelectTrigger>
                   <SelectValue />
@@ -80,14 +80,14 @@ function Customers() {
                 <SelectContent>
                   {["hotel", "market", "stall", "retail", "walkin"].map((k) => (
                     <SelectItem key={k} value={k}>
-                      {k}
+                      {{ hotel: "Hotel or restaurant", market: "Market", stall: "Stall", retail: "Shop", walkin: "Walk-in customer" }[k]}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <Button className="w-full" disabled={add.isPending} onClick={() => add.mutate()}>
-              Add counter
+              Add customer
             </Button>
           </div>
         </Card>

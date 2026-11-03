@@ -33,7 +33,7 @@ function Alerts() {
     mutationFn: () =>
       sendAlert({ data: { channel, kind, recipientCode: to, message } }),
     onSuccess: async () => {
-      toast.success(`Queued on ${channel.toUpperCase()} desk`);
+      toast.success("Message saved in the system");
       setMessage("");
       await qc.invalidateQueries({ queryKey: ["notes"] });
     },
@@ -43,9 +43,9 @@ function Alerts() {
   return (
     <div>
       <PageHeader
-        eyebrow="Messaging desk"
-        title="Reach the house by channel"
-        description="Low stock, payments, and the daily pulse move out through SMS, WhatsApp, or email for a Kenyan fish house."
+        eyebrow="Messages and alerts"
+        title="Keep a record of important messages"
+        description="Save updates about low stock, payments, and daily work. Messages are recorded here; SMS and WhatsApp are not connected yet."
       />
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
@@ -66,7 +66,7 @@ function Alerts() {
           </ul>
         </Card>
         <Card>
-          <h2 className="font-display text-xl italic text-plum-deep">Compose</h2>
+          <h2 className="font-display text-xl italic text-plum-deep">Write a message</h2>
           <div className="mt-4 space-y-3">
             <div className="space-y-1.5">
               <Label>Channel</Label>
@@ -82,7 +82,7 @@ function Alerts() {
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Kind</Label>
+              <Label>Message type</Label>
               <Select value={kind} onValueChange={setKind}>
                 <SelectTrigger>
                   <SelectValue />
@@ -97,7 +97,7 @@ function Alerts() {
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Desk / counter</Label>
+              <Label>Who is this for?</Label>
               <Input value={to} onChange={(e) => setTo(e.target.value)} />
             </div>
             <div className="space-y-1.5">
@@ -105,7 +105,7 @@ function Alerts() {
               <Textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={4} />
             </div>
             <Button className="w-full" disabled={send.isPending} onClick={() => send.mutate()}>
-              Send
+              Save message
             </Button>
           </div>
         </Card>

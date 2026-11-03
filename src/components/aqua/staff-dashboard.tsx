@@ -6,6 +6,7 @@ import {
   Boxes,
   ClipboardList,
   Fish,
+  HandCoins,
   PackageCheck,
   QrCode,
   Receipt,
@@ -23,40 +24,142 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 
 const DASHBOARDS: Record<
   AquaRole,
-  { eyebrow: string; title: string; description: string; links: { to: string; label: string; detail: string; icon: LucideIcon }[] }
+  {
+    eyebrow: string;
+    title: string;
+    description: string;
+    links: { to: string; label: string; detail: string; icon: LucideIcon }[];
+  }
 > = {
   owner: {
-    eyebrow: "Owner dashboard",
-    title: "Keep the whole fish house in view.",
-    description: "Sales, payments, customer orders, reports, and staff access in one owner workspace.",
+    eyebrow: "Owner",
+    title: "See how the fish business is doing.",
+    description: "Check sales, payments, shop orders, reports, and who can use the staff system.",
     links: [
-      { to: "/app/", label: "Business pulse", detail: "Sales totals, stock value, and reorder watch.", icon: Wallet },
-      { to: "/app/orders", label: "Customer orders", detail: "Review requests and move them toward pickup.", icon: PackageCheck },
-      { to: "/app/payments", label: "Payments", detail: "Review cash and M-Pesa records.", icon: Wallet },
-      { to: "/app/reports", label: "Reports", detail: "Review performance and export sales.", icon: ClipboardList },
-      { to: "/app/team", label: "Team access", detail: "Approve staff workspace access.", icon: Users },
+      {
+        to: "/app/",
+        label: "Business overview",
+        detail: "See today's sales, money owed, and fish running low.",
+        icon: Wallet,
+      },
+      {
+        to: "/app/orders",
+        label: "Shop orders",
+        detail: "Check orders and follow them through to pickup.",
+        icon: PackageCheck,
+      },
+      {
+        to: "/app/payments",
+        label: "Check payments",
+        detail: "See cash and M-Pesa payments that need checking.",
+        icon: Wallet,
+      },
+      {
+        to: "/app/reports",
+        label: "Reports",
+        detail: "Check sales and download the sales list.",
+        icon: ClipboardList,
+      },
+      {
+        to: "/app/team",
+        label: "Staff access",
+        detail: "Choose what each staff member can do.",
+        icon: Users,
+      },
     ],
   },
   manager: {
-    eyebrow: "House manager dashboard",
-    title: "Keep every landing and cold hold moving.",
-    description: "Receive stock, watch cold-chain conditions, trace batches, and coordinate customer pickups.",
+    eyebrow: "House manager",
+    title: "Receive fish and keep orders moving.",
+    description:
+      "Record fish from fishers, check stock and temperatures, and get shop orders ready for pickup.",
     links: [
-      { to: "/app/inventory", label: "Fish inventory", detail: "Check quantities, prices, and reorder lines.", icon: Fish },
-      { to: "/app/orders", label: "Customer orders", detail: "Confirm availability and prepare pickups.", icon: PackageCheck },
-      { to: "/app/batches", label: "Catch traceability", detail: "Follow each landing’s batch trail.", icon: QrCode },
-      { to: "/app/suppliers", label: "Suppliers", detail: "Keep landing rings and sourcing details current.", icon: Boxes },
-      { to: "/app/cold-chain", label: "Cold chain", detail: "Review temperature and scale readings.", icon: Thermometer },
+      {
+        to: "/app/inventory",
+        label: "Fish stock",
+        detail: "See how much fish is available and what is running low.",
+        icon: Fish,
+      },
+      {
+        to: "/app/orders",
+        label: "Shop orders",
+        detail: "Confirm orders, prepare fish, and mark them ready.",
+        icon: PackageCheck,
+      },
+      {
+        to: "/app/batches",
+        label: "Fish journey",
+        detail: "See where each fish came from and where it went.",
+        icon: QrCode,
+      },
+      {
+        to: "/app/suppliers",
+        label: "Fishers & suppliers",
+        detail: "Keep fisher details and delivery records up to date.",
+        icon: Boxes,
+      },
+      {
+        to: "/app/cold-chain",
+        label: "Temperature & weighing",
+        detail: "Check cold-room temperatures and record fish weights.",
+        icon: Thermometer,
+      },
     ],
   },
   floor: {
-    eyebrow: "Sales attendant dashboard",
-    title: "Serve the next customer quickly.",
-    description: "Build a sale, record the counter, and keep the customer’s receipt and catch trail together.",
+    eyebrow: "Sales attendant",
+    title: "Serve customers and hand over orders.",
+    description: "Weigh fish, record what the customer pays, and prepare shop orders for pickup.",
     links: [
-      { to: "/app/sales", label: "Open the sales till", detail: "Choose fish, weigh quantities, and record a sale.", icon: Receipt },
-      { to: "/app/customers", label: "Customer counters", detail: "Find the customer for a sale.", icon: Users },
-      { to: "/app/batches", label: "Batch lookup", detail: "Show a customer the origin of a catch.", icon: QrCode },
+      {
+        to: "/app/sales",
+        label: "Record a sale",
+        detail: "Choose the fish, enter the weight, and record payment.",
+        icon: Receipt,
+      },
+      {
+        to: "/app/orders",
+        label: "Shop order pickups",
+        detail: "Hand over ready orders and give customers a receipt.",
+        icon: PackageCheck,
+      },
+      {
+        to: "/app/customers",
+        label: "Customers",
+        detail: "Choose who is buying the fish.",
+        icon: Users,
+      },
+      {
+        to: "/app/batches",
+        label: "Fish journey",
+        detail: "Show where a fish came from.",
+        icon: QrCode,
+      },
+    ],
+  },
+  accounts: {
+    eyebrow: "Accounts",
+    title: "Keep track of every payment.",
+    description: "Check customer payments, see what is owed to fishers, and review sales reports.",
+    links: [
+      {
+        to: "/app/payments",
+        label: "Check payments",
+        detail: "Check cash and M-Pesa payments against receipts.",
+        icon: Wallet,
+      },
+      {
+        to: "/app/suppliers",
+        label: "Money owed to fishers",
+        detail: "See delivery costs, outstanding amounts, and payments made.",
+        icon: HandCoins,
+      },
+      {
+        to: "/app/reports",
+        label: "Sales reports",
+        detail: "Review daily and weekly sales or download the sales list.",
+        icon: ClipboardList,
+      },
     ],
   },
 };
@@ -65,6 +168,7 @@ const ROLE_PATH: Record<AquaRole, string> = {
   owner: "/staff/owner",
   manager: "/staff/housemanager",
   floor: "/staff/attendant",
+  accounts: "/staff/accounts",
 };
 
 export function StaffDashboard({ role }: { role: AquaRole }) {
@@ -94,27 +198,43 @@ export function StaffDashboard({ role }: { role: AquaRole }) {
   }, [demoMode, demoSetRole, role, isPending, user, access.data, navigate]);
 
   if (!demoMode && (isPending || access.isLoading || !user)) {
-    return <main className="grid min-h-dvh place-items-center bg-cream p-6 text-sm text-muted">Checking staff access…</main>;
+    return (
+      <main className="grid min-h-dvh place-items-center bg-cream p-6 text-sm text-muted">
+        Checking your staff access…
+      </main>
+    );
   }
   if (!demoMode && access.isError) {
     return (
       <main className="grid min-h-dvh place-items-center bg-cream p-6">
         <Card className="max-w-md">
-          <h1 className="font-display text-2xl italic text-plum-deep">Could not verify access</h1>
-          <p className="mt-2 text-sm text-muted">This staff workspace stays locked until access is confirmed.</p>
-          <Button className="mt-4" onClick={() => void access.refetch()}>Retry</Button>
+          <h1 className="font-display text-2xl italic text-plum-deep">
+            We could not check your access
+          </h1>
+          <p className="mt-2 text-sm text-muted">
+            This page stays locked until we can confirm you are allowed to use it.
+          </p>
+          <Button className="mt-4" onClick={() => void access.refetch()}>
+            Try again
+          </Button>
         </Card>
       </main>
     );
   }
   if (!demoMode && access.data !== role) {
-    return <main className="grid min-h-dvh place-items-center bg-cream p-6 text-sm text-muted">Opening your workspace…</main>;
+    return (
+      <main className="grid min-h-dvh place-items-center bg-cream p-6 text-sm text-muted">
+        Opening your staff page…
+      </main>
+    );
   }
 
   return (
     <AppShell role={role}>
       <div>
-        <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">{dashboard.eyebrow}</p>
+        <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">
+          {dashboard.eyebrow}
+        </p>
         <h1 className="mt-2 max-w-3xl font-display text-4xl italic text-plum-deep sm:text-5xl">
           {dashboard.title}
         </h1>
@@ -143,7 +263,7 @@ export function StaffDashboard({ role }: { role: AquaRole }) {
         </div>
         <div className="mt-7">
           <Button asChild variant="ghost" size="sm">
-            <Link to="/staff">Switch staff workspace</Link>
+            <Link to="/staff">Choose another staff role</Link>
           </Button>
         </div>
       </div>

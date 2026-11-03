@@ -33,19 +33,25 @@ function Trace() {
         </Button>
       </header>
       <main className="mx-auto max-w-3xl px-4 py-8">
-        {q.isLoading ? <p className="text-muted">Reading the trail…</p> : null}
+        {q.isLoading ? <p className="text-muted">Loading fish details…</p> : null}
         {q.data === null ? (
           <Card>
-            <h1 className="font-display text-3xl italic text-plum-deep">No such batch</h1>
+            <h1 className="font-display text-3xl italic text-plum-deep">
+              We could not find this fish record
+            </h1>
             <p className="mt-2 text-sm text-muted">
-              {code} is not on the ice. Check the tag, or try AQ-DUNGA-8841.
+              We could not find delivery number {code}. Check the number and try again.
             </p>
           </Card>
         ) : q.data ? (
           <div className="space-y-4">
-            <p className="text-[11px] tracking-[0.22em] text-muted uppercase">Catch-to-sale trail</p>
+            <p className="text-[11px] tracking-[0.22em] text-muted uppercase">
+              Fish delivery record
+            </p>
             <div className="flex flex-wrap items-end justify-between gap-3">
-              <h1 className="font-display text-4xl italic text-plum-deep">{q.data.batch.fishName}</h1>
+              <h1 className="font-display text-4xl italic text-plum-deep">
+                {q.data.batch.fishName}
+              </h1>
               {sp ? <Badge variant={sp.variant}>{sp.label}</Badge> : null}
             </div>
             <p className="font-mono text-sm text-muted">{q.data.batch.code}</p>
@@ -53,31 +59,36 @@ function Trace() {
               <Card>
                 <dl className="grid grid-cols-2 gap-4 text-sm">
                   <Item k="Local name" v={q.data.batch.localName} />
-                  <Item k="Landing" v={q.data.batch.landingSite} />
-                  <Item k="Ring" v={q.data.boatOrCoop} />
-                  <Item k="Supplier" v={q.data.batch.supplierCode} />
+                  <Item k="Where it came from" v={q.data.batch.landingSite} />
+                  <Item k="Boat or fisher group" v={q.data.boatOrCoop} />
+                  <Item k="Fisher or supplier number" v={q.data.batch.supplierCode} />
                   <Item
-                    k="Landed"
+                    k="Date received"
                     v={format(new Date(q.data.batch.deliveredAt), "d MMM yyyy, HH:mm")}
                   />
-                  <Item k="Hold" v={tempC(q.data.batch.tempC)} />
-                  <Item k="Landed weight" v={kg(q.data.batch.quantityKg)} />
-                  <Item k="Still on ice" v={kg(q.data.batch.remainingKg)} />
+                  <Item k="Temperature" v={tempC(q.data.batch.tempC)} />
+                  <Item k="Weight received" v={kg(q.data.batch.quantityKg)} />
+                  <Item k="Still in stock" v={kg(q.data.batch.remainingKg)} />
                 </dl>
               </Card>
               <Card className="flex flex-col items-center justify-center">
                 <QrCode value={`${origin}/trace/${q.data.batch.code}`} className="size-36" />
-                <p className="mt-2 text-center text-[11px] text-muted">Scan to share this trail</p>
+                <p className="mt-2 text-center text-[11px] text-muted">
+                  Scan to open this fish record
+                </p>
               </Card>
             </div>
             <Card>
-              <h2 className="font-display text-xl italic text-plum-deep">Where it went</h2>
+              <h2 className="font-display text-xl italic text-plum-deep">Where it was sold</h2>
               {q.data.hops.length === 0 ? (
-                <p className="mt-2 text-sm text-muted">Still waiting on the ice — no sales yet.</p>
+                <p className="mt-2 text-sm text-muted">This fish has not been sold yet.</p>
               ) : (
                 <ol className="mt-3 space-y-3">
                   {q.data.hops.map((h) => (
-                    <li key={h.receiptNo} className="flex items-center justify-between gap-3 text-sm">
+                    <li
+                      key={h.receiptNo}
+                      className="flex items-center justify-between gap-3 text-sm"
+                    >
                       <span>
                         <span className="font-medium">{h.customerCode}</span>
                         <span className="text-muted"> · {h.receiptNo}</span>

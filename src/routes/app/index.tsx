@@ -26,13 +26,13 @@ function Pulse() {
   return (
     <div>
       <PageHeader
-        eyebrow="House pulse"
-        title="This morning at the till"
-        description="The last two weeks, the ice moving thin, and the next few days of demand."
+        eyebrow="Business overview"
+        title="How the fish business is doing"
+        description="Today's sales, recent sales, fish running low, and M-Pesa payments to check."
         action={
           <Button asChild>
             <Link to="/app/sales">
-              New sale
+              Record a sale
               <ArrowRight className="size-4" />
             </Link>
           </Button>
@@ -40,17 +40,17 @@ function Pulse() {
       />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <Kpi label="Today" value={kes(d?.todayTotal ?? 0)} hint={`${d?.todayCount ?? 0} receipts`} />
-        <Kpi label="Last 7 days" value={kes(d?.weekTotal ?? 0)} hint="All counters" />
+        <Kpi label="Sales today" value={kes(d?.todayTotal ?? 0)} hint={`${d?.todayCount ?? 0} receipts`} />
+        <Kpi label="Sales this week" value={kes(d?.weekTotal ?? 0)} hint="All customers" />
         <Kpi
-          label="Ice value"
+          label="Value of fish in stock"
           value={kes(d?.stockValue ?? 0)}
-          hint="At listed kilo prices"
+          hint="Based on today's listed prices"
         />
         <Kpi
-          label="Pending M-Pesa"
+          label="M-Pesa to check"
           value={kes(d?.pendingTotal ?? 0)}
-          hint={`${d?.pendingCount ?? 0} waiting STK`}
+          hint={`${d?.pendingCount ?? 0} payments not yet confirmed`}
           warn={(d?.pendingCount ?? 0) > 0}
         />
       </div>
@@ -58,8 +58,8 @@ function Pulse() {
       <div className="mt-6 grid gap-4 xl:grid-cols-3">
         <Card className="xl:col-span-2">
           <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="font-display text-xl italic text-plum-deep">Till, two weeks</h2>
-            <p className="text-xs text-muted">KES · daily</p>
+            <h2 className="font-display text-xl italic text-plum-deep">Sales over the last two weeks</h2>
+            <p className="text-xs text-muted">Daily · KES</p>
           </div>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
@@ -107,7 +107,7 @@ function Pulse() {
         </Card>
 
         <Card>
-          <h2 className="font-display text-xl italic text-plum-deep">Pay mix</h2>
+          <h2 className="font-display text-xl italic text-plum-deep">How customers paid</h2>
           <p className="mt-1 text-xs text-muted">Last 14 days</p>
           <ul className="mt-4 space-y-3">
             {(d?.mix ?? []).map((m) => {
@@ -135,12 +135,12 @@ function Pulse() {
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
         <Card>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="font-display text-xl italic text-plum-deep">Running thin</h2>
-            <Badge variant="warn">Reorder</Badge>
+            <h2 className="font-display text-xl italic text-plum-deep">Fish running low</h2>
+            <Badge variant="warn">Buy more</Badge>
           </div>
           <ul className="space-y-3">
             {(d?.low ?? []).length === 0 ? (
-              <li className="text-sm text-muted">Ice hold is above the lines you set.</li>
+              <li className="text-sm text-muted">All fish are above their low-stock levels.</li>
             ) : (
               d?.low.map((f) => (
                 <li key={f.id} className="flex items-center gap-3">
@@ -163,8 +163,8 @@ function Pulse() {
         </Card>
 
         <Card>
-          <h2 className="font-display text-xl italic text-plum-deep">Three-day read</h2>
-          <p className="mt-1 text-xs text-muted">Pace of the last week, projected forward</p>
+          <h2 className="font-display text-xl italic text-plum-deep">How long stock may last</h2>
+          <p className="mt-1 text-xs text-muted">Estimate based on last week's sales</p>
           <ul className="mt-4 space-y-3">
             {(d?.forecast ?? [])
               .slice()
@@ -176,7 +176,7 @@ function Pulse() {
                     {f.name}
                   </span>
                   <span className="tabular-nums text-muted">
-                    {f.daysLeft > 20 ? "steady" : `${f.daysLeft.toFixed(1)} days`}
+                    {f.daysLeft > 20 ? "More than 20 days" : `About ${f.daysLeft.toFixed(1)} days`}
                   </span>
                 </li>
               ))}

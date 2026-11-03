@@ -23,15 +23,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { listFish, listSuppliers, receiveDelivery } from "@/lib/aqua/queries";
+import { listFish, listSuppliers, recordDelivery } from "@/lib/aqua/queries";
 import { kes, kg } from "@/lib/aqua/format";
-import { canMutateStock } from "@/lib/aqua/role";
+import { canMutateStock, useAquaRole } from "@/lib/aqua/role";
 import { getMyAquaRole } from "@/lib/aqua/market";
 
 export const Route = createFileRoute("/app/inventory")({ component: Inventory });
 
 function Inventory() {
-  const role = useQuery({ queryKey: ["aqua-staff-role"], queryFn: () => getMyAquaRole() });
+  const demoMode = import.meta.env.DEV && import.meta.env.VITE_AUTH_ENABLED === "false";
+  const demoRole = useAquaRole((state) => state.role);
+  const roleAccess = useQuery({
+    queryKey: ["aqua-staff-role"],
+    queryFn: () => getMyAquaRole(),
+    enabled: !demoMode,
+  });
+  const role = demoMode ? demoRole : roleAccess.data;
   const qc = useQueryClient();
   const fish = useQuery({ queryKey: ["fish"], queryFn: () => listFish() });
   const suppliers = useQuery({ queryKey: ["suppliers"], queryFn: () => listSuppliers() });
@@ -44,17 +51,17 @@ function Inventory() {
 
   const receive = useMutation({
     mutationFn: () =>
-      receiveDelivery({
+      recordDelivery({
         data: {
-          fishTypeId: Number(fishTypeId),
           supplierId: Number(supplierId),
-          quantityKg: Number(qty),
-          tempC: Number(temp),
           landingSite: landing,
+          tempC: Number(temp),
+          note: "Added from the fish stock page",
+          items: [{ fishTypeId: Number(fishTypeId), quantityKg: Number(qty), unitCost: 0 }],
         },
       }),
-    onSuccess: async (res) => {
-      toast.success(`Batch ${res.code} minted`);
+    onSuccess: async () => {
+      toast.success("Delivery recorded");
       setOpen(false);
       await qc.invalidateQueries();
     },
@@ -64,12 +71,12 @@ function Inventory() {
   return (
     <div>
       <PageHeader
-        eyebrow="Ice hold"
-        title="What is on the ice"
-        description="Kilos, reorder lines, and the season flag. Receive a landing to mint a batch QR."
+        eyebrow="Fish stock"
+        title="Fish available for sale"
+        description="See how much fish is in stock, the price per kilo, and what is running low."
         action={
-          role.data && canMutateStock(role.data) ? (
-            <Button onClick={() => setOpen(true)}>Receive landing</Button>
+          role && canMutateStock(role) ? (
+            <Button onClick={() => setOpen(true)}>Record fish delivery</Button>
           ) : null
         }
       />
@@ -78,7 +85,11 @@ function Inventory() {
           const low = f.quantityKg <= f.reorderKg;
           return (
             <Card key={f.id} className="overflow-hidden p-0">
-              <img src={`/aqua/${f.imageKey}.jpg`} alt={f.name} className="h-40 w-full object-cover" />
+              <img
+                src={`/aqua/${f.imageKey}.jpg`}
+                alt={f.name}
+                className="h-40 w-full object-cover"
+              />
               <div className="p-5">
                 <div className="flex items-start justify-between gap-2">
                   <div>
@@ -88,12 +99,12 @@ function Inventory() {
                     </p>
                   </div>
                   <Badge variant={low ? "warn" : f.inSeason ? "ok" : "outline"}>
-                    {low ? "Reorder" : f.inSeason ? "In season" : "Off season"}
+                    {low ? "Running low" : f.inSeason ? "In season" : "Out of season"}
                   </Badge>
                 </div>
                 <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                   <div>
-                    <dt className="text-[11px] tracking-wider text-muted uppercase">On ice</dt>
+                    <dt className="text-[11px] tracking-wider text-muted uppercase">In stock</dt>
                     <dd className="tabular-nums">{kg(f.quantityKg)}</dd>
                   </div>
                   <div>
@@ -101,11 +112,15 @@ function Inventory() {
                     <dd className="tabular-nums">{kes(f.pricePerKg)}/kg</dd>
                   </div>
                   <div>
-                    <dt className="text-[11px] tracking-wider text-muted uppercase">Reorder at</dt>
+                    <dt className="text-[11px] tracking-wider text-muted uppercase">
+                      Low-stock alert at
+                    </dt>
                     <dd className="tabular-nums">{kg(f.reorderKg)}</dd>
                   </div>
                   <div>
-                    <dt className="text-[11px] tracking-wider text-muted uppercase">Hold value</dt>
+                    <dt className="text-[11px] tracking-wider text-muted uppercase">
+                      Value of stock
+                    </dt>
                     <dd className="tabular-nums">{kes(f.quantityKg * f.pricePerKg)}</dd>
                   </div>
                 </dl>
@@ -118,8 +133,10 @@ function Inventory() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Receive a landing</DialogTitle>
-            <DialogDescription>Kilos go onto the ice and a batch code is minted.</DialogDescription>
+            <DialogTitle>Record fish delivery</DialogTitle>
+            <DialogDescription>
+              Enter the fish and weight to add it to stock and create a delivery number.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <Field label="Fish">
@@ -136,7 +153,7 @@ function Inventory() {
                 </SelectContent>
               </Select>
             </Field>
-            <Field label="Supplier ring">
+            <Field label="Fisher or supplier">
               <Select
                 value={supplierId}
                 onValueChange={(v) => {
@@ -146,7 +163,7 @@ function Inventory() {
                 }}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Landing ring" />
+                  <SelectValue placeholder="Choose a fisher or supplier" />
                 </SelectTrigger>
                 <SelectContent>
                   {(suppliers.data ?? []).map((s) => (
@@ -157,19 +174,34 @@ function Inventory() {
                 </SelectContent>
               </Select>
             </Field>
-            <Field label="Landing site">
+            <Field label="Where the fish came from">
               <Input value={landing} onChange={(e) => setLanding(e.target.value)} />
             </Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Kg">
-                <Input type="number" min={0.5} step={0.5} value={qty} onChange={(e) => setQty(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0.5}
+                  step={0.5}
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                />
               </Field>
-              <Field label="Hold °C">
-                <Input type="number" step={0.1} value={temp} onChange={(e) => setTemp(e.target.value)} />
+              <Field label="Fish temperature °C">
+                <Input
+                  type="number"
+                  step={0.1}
+                  value={temp}
+                  onChange={(e) => setTemp(e.target.value)}
+                />
               </Field>
             </div>
-            <Button className="w-full" disabled={receive.isPending} onClick={() => receive.mutate()}>
-              Mint batch
+            <Button
+              className="w-full"
+              disabled={receive.isPending}
+              onClick={() => receive.mutate()}
+            >
+              Add fish to stock
             </Button>
           </div>
         </DialogContent>

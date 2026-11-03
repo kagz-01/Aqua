@@ -1,0 +1,1 @@
+import{a as e}from"./dist-DnauGsKW.js";import{t}from"./staff-dashboard-BOWwHWny.js";var n=e(),r=()=>(0,n.jsx)(t,{role:`manager`});export{r as component};

@@ -33,7 +33,7 @@ function ColdChain() {
   const tick = useMutation({
     mutationFn: () => tickSensors(),
     onSuccess: async () => {
-      toast.success("Holds polled");
+      toast.success("Temperature and scale readings refreshed");
       await qc.invalidateQueries({ queryKey: ["sensors"] });
       await qc.invalidateQueries({ queryKey: ["notes"] });
     },
@@ -46,10 +46,14 @@ function ColdChain() {
           fishTypeId: Number(fishTypeId),
           supplierId: Number(supplierId),
           kg: Number(weight),
+          landingSite: "Scale intake",
+          tempC: 2,
+          note: "Digital weigh-in",
         },
       }),
     onSuccess: async (res) => {
-      toast.success(`Scale minted ${res.code}`);
+      const result = res as { code?: string; totalKg?: number };
+      toast.success(`Weigh-in recorded${result.code ? ` · ${result.code}` : ""}`);
       await qc.invalidateQueries();
     },
     onError: (e: Error) => toast.error(e.message),
@@ -58,12 +62,12 @@ function ColdChain() {
   return (
     <div>
       <PageHeader
-        eyebrow="IoT pathway"
-        title="Cold chain & scale"
-        description="Sensors already report. Hardware can arrive later — the desk is listening now."
+        eyebrow="Fish temperature and weighing"
+        title="Check temperatures and record weights"
+        description="View recorded readings and enter fish weights. Live sensor connections can be added later."
         action={
           <Button variant="secondary" onClick={() => tick.mutate()} disabled={tick.isPending}>
-            Poll holds
+            Refresh readings
           </Button>
         }
       />
@@ -92,9 +96,9 @@ function ColdChain() {
         ))}
       </div>
       <Card className="mt-4">
-        <h2 className="font-display text-xl italic text-plum-deep">Digital weigh-in</h2>
+        <h2 className="font-display text-xl italic text-plum-deep">Record fish weight</h2>
         <p className="mt-1 text-sm text-muted">
-          A scale reading becomes stock and a batch in one motion.
+          Enter the fish weight to add it to stock and create a tracking code.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-4">
           <div className="space-y-1.5 sm:col-span-1">
@@ -113,10 +117,10 @@ function ColdChain() {
             </Select>
           </div>
           <div className="space-y-1.5">
-            <Label>Landing</Label>
+            <Label>Fisher or delivery</Label>
             <Select value={supplierId} onValueChange={setSupplierId}>
               <SelectTrigger>
-                <SelectValue placeholder="Ring" />
+                <SelectValue placeholder="Choose a fisher" />
               </SelectTrigger>
               <SelectContent>
                 {(suppliers.data ?? []).map((s) => (
@@ -128,12 +132,12 @@ function ColdChain() {
             </Select>
           </div>
           <div className="space-y-1.5">
-            <Label>Kg on scale</Label>
+            <Label>Weight in kilos</Label>
             <Input type="number" step={0.1} value={weight} onChange={(e) => setWeight(e.target.value)} />
           </div>
           <div className="flex items-end">
             <Button className="w-full" disabled={weigh.isPending} onClick={() => weigh.mutate()}>
-              Commit scale
+              Record weight
             </Button>
           </div>
         </div>

@@ -21,11 +21,7 @@ import { UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { kes, kg } from "@/lib/aqua/format";
 import { listFish } from "@/lib/aqua/queries";
-import {
-  listMyOrders,
-  placeCustomerOrder,
-  type CustomerOrder,
-} from "@/lib/aqua/market";
+import { listMyOrders, placeCustomerOrder, type CustomerOrder } from "@/lib/aqua/market";
 
 export const Route = createFileRoute("/client")({ component: FishMarket });
 
@@ -34,6 +30,14 @@ type MarketTab = "shop" | "orders";
 const CART_KEY = "aqua-market-cart";
 
 const ORDER_STEPS = ["placed", "confirmed", "preparing", "ready", "completed"];
+const ORDER_STATUS_LABELS: Record<string, string> = {
+  placed: "Order received",
+  confirmed: "Confirmed",
+  preparing: "Being prepared",
+  ready: "Ready to collect",
+  completed: "Collected",
+  cancelled: "Cancelled",
+};
 
 function FishMarket() {
   const navigate = useNavigate();
@@ -149,7 +153,7 @@ function FishMarket() {
               onClick={() => setTab("shop")}
               className={`min-h-11 rounded-md px-3 text-sm font-medium ${tab === "shop" ? "bg-plum text-cream" : "text-ink-soft hover:bg-paper"}`}
             >
-              Shop fish
+              Shop samaki
             </button>
             <button
               type="button"
@@ -167,12 +171,17 @@ function FishMarket() {
               {orderCount > 0 ? <span className="text-xs">{orderCount}</span> : null}
             </button>
             {sessionPending ? (
-              <span className="size-9 animate-pulse rounded-full bg-lilac-soft" aria-label="Loading account" />
+              <span
+                className="size-9 animate-pulse rounded-full bg-lilac-soft"
+                aria-label="Loading account"
+              />
             ) : user ? (
               <UserButton />
             ) : (
               <Button asChild size="sm" variant="secondary">
-                <Link to="/login" search={{ next: "/client" }}>Sign in</Link>
+                <Link to="/login" search={{ next: "/client" }}>
+                  Sign in
+                </Link>
               </Button>
             )}
           </nav>
@@ -185,13 +194,13 @@ function FishMarket() {
             <section className="mb-8 grid gap-6 rounded-2xl bg-plum-deep p-6 text-cream sm:p-9 lg:grid-cols-[1fr_auto] lg:items-end">
               <div>
                 <p className="text-xs font-medium tracking-[0.2em] text-lilac uppercase">
-                  Lakeside fish market
+                  Fresh samaki from the lake
                 </p>
                 <h1 className="mt-3 max-w-2xl font-display text-4xl italic sm:text-5xl">
-                  Choose the catch for your table.
+                  Choose fish for your table.
                 </h1>
                 <p className="mt-3 max-w-xl text-sm leading-6 text-lilac">
-                  Browse today’s selection, build your basket, and follow your pickup order from your account.
+                  Choose the fish and kilos you want, place a pickup order, and check its progress here.
                 </p>
               </div>
               <div className="flex items-center gap-2 rounded-lg bg-cream/10 px-4 py-3 text-sm">
@@ -204,16 +213,22 @@ function FishMarket() {
               <section>
                 <div className="mb-4 flex items-end justify-between gap-3">
                   <div>
-                    <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">Fresh selection</p>
-                    <h2 className="mt-1 font-display text-2xl italic text-plum-deep">Today on the ice</h2>
+                    <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">
+                      Fish available today
+                    </p>
+                    <h2 className="mt-1 font-display text-2xl italic text-plum-deep">
+                      Choose your fish
+                    </h2>
                   </div>
-                  <span className="text-xs text-muted">Prices per kg · KES</span>
+                  <span className="text-xs text-muted">Price per kilo · KES</span>
                 </div>
                 {fish.isLoading ? (
-                  <p className="rounded-xl bg-paper p-6 text-sm text-muted">Loading today’s catch…</p>
+                  <p className="rounded-xl bg-paper p-6 text-sm text-muted">
+                    Loading fish available today…
+                  </p>
                 ) : fish.isError ? (
                   <p role="alert" className="rounded-xl bg-paper p-6 text-sm text-danger">
-                    The market could not load. Refresh and try again.
+                    We could not load the fish list. Please try again.
                   </p>
                 ) : (
                   <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -230,8 +245,12 @@ function FishMarket() {
                           <div className="p-4">
                             <div className="flex items-start justify-between gap-2">
                               <div>
-                                <h3 className="font-display text-xl italic text-plum-deep">{item.name}</h3>
-                                <p className="text-sm text-muted">{item.localName} · {item.category}</p>
+                                <h3 className="font-display text-xl italic text-plum-deep">
+                                  {item.name}
+                                </h3>
+                                <p className="text-sm text-muted">
+                                  {item.localName}
+                                </p>
                               </div>
                               <Badge variant={available > 0 ? "ok" : "outline"}>
                                 {available > 0 ? `${kg(available)} available` : "Sold out"}
@@ -239,8 +258,10 @@ function FishMarket() {
                             </div>
                             <div className="mt-4 flex items-end justify-between gap-2">
                               <div>
-                                <p className="text-xs text-muted">Per kilogram</p>
-                                <p className="font-display text-xl italic text-plum-deep">{kes(item.pricePerKg)}</p>
+                                <p className="text-xs text-muted">Price per kilo</p>
+                                <p className="font-display text-xl italic text-plum-deep">
+                                  {kes(item.pricePerKg)}
+                                </p>
                               </div>
                               <div className="flex items-center gap-1">
                                 <Button
@@ -278,17 +299,22 @@ function FishMarket() {
 
               <Card className="lg:sticky lg:top-24">
                 <div className="flex items-center justify-between gap-3">
-                  <h2 className="font-display text-2xl italic text-plum-deep">Your basket</h2>
+                  <h2 className="font-display text-2xl italic text-plum-deep">Your order</h2>
                   <ShoppingCart className="size-5 text-plum" />
                 </div>
                 {lines.length === 0 ? (
                   <div className="py-8 text-center">
-                    <p className="text-sm text-muted">Your basket is waiting for something fresh.</p>
+                    <p className="text-sm text-muted">
+                      Choose fish to start your order.
+                    </p>
                   </div>
                 ) : (
                   <ul className="mt-4 divide-y divide-border">
                     {lines.map(({ fish: item, quantityKg }) => (
-                      <li key={item!.id} className="flex items-center justify-between gap-3 py-3 text-sm">
+                      <li
+                        key={item!.id}
+                        className="flex items-center justify-between gap-3 py-3 text-sm"
+                      >
                         <div className="min-w-0">
                           <p className="truncate font-medium">{item!.name}</p>
                           <p className="text-xs text-muted">{kg(quantityKg)}</p>
@@ -302,15 +328,17 @@ function FishMarket() {
                 )}
                 <div className="mt-3 border-t border-border pt-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted">Estimated total</span>
-                    <span className="font-display text-2xl italic text-plum-deep">{kes(cartTotal)}</span>
+                    <span className="text-sm text-muted">Total so far</span>
+                    <span className="font-display text-2xl italic text-plum-deep">
+                      {kes(cartTotal)}
+                    </span>
                   </div>
                   <div className="mt-4 space-y-2">
-                    <Label htmlFor="order-note">Pickup note (optional)</Label>
+                    <Label htmlFor="order-note">Note for the fish house (optional)</Label>
                     <Input
                       id="order-note"
                       maxLength={300}
-                      placeholder="Anything the fish house should know?"
+                      placeholder="Add a note about your order"
                       value={note}
                       onChange={(event) => setNote(event.target.value)}
                     />
@@ -322,15 +350,14 @@ function FishMarket() {
                     onClick={startCheckout}
                   >
                     {checkout.isPending
-                      ? "Sending order…"
+                      ? "Placing your order…"
                       : user
-                        ? "Place pickup order"
+                        ? "Place order for pickup"
                         : "Sign in to checkout"}
                     <ArrowRight className="size-4" />
                   </Button>
                   <p className="mt-3 text-xs leading-5 text-muted">
-                    This sends an order request. The fish house will confirm availability and pickup timing.
-                    Payment is arranged at pickup.
+                    The fish house will confirm your order. Pay when you collect it.
                   </p>
                 </div>
               </Card>
@@ -348,7 +375,9 @@ function FishMarket() {
       <footer className="border-t border-border bg-paper">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <span>Aqua Fish Market · Dunga Beach</span>
-          <Link to="/" className="hover:text-plum">About Aqua</Link>
+          <Link to="/" className="hover:text-plum">
+            About Aqua
+          </Link>
         </div>
       </footer>
     </div>
@@ -370,26 +399,42 @@ function OrdersView({
     <section>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">Your account</p>
-          <h1 className="mt-1 font-display text-3xl italic text-plum-deep">Order tracking</h1>
-          <p className="mt-2 text-sm text-muted">Follow each request as the fish house prepares it.</p>
+          <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">Your orders</p>
+          <h1 className="mt-1 font-display text-3xl italic text-plum-deep">Check your orders</h1>
+          <p className="mt-2 text-sm text-muted">
+            See when your fish is confirmed, being prepared, and ready to collect.
+          </p>
         </div>
-        <Button type="button" variant="secondary" onClick={onBack}>Back to the market</Button>
+        <Button type="button" variant="secondary" onClick={onBack}>
+          Back to shop
+        </Button>
       </div>
       {loading ? (
-        <Card><p className="text-sm text-muted">Loading your orders…</p></Card>
+        <Card>
+          <p className="text-sm text-muted">Loading your orders…</p>
+        </Card>
       ) : error ? (
-        <Card><p role="alert" className="text-sm text-danger">Orders could not be loaded. Please try again.</p></Card>
+        <Card>
+          <p role="alert" className="text-sm text-danger">
+            We could not load your orders. Please try again.
+          </p>
+        </Card>
       ) : orders.length === 0 ? (
         <Card className="py-12 text-center">
           <ShoppingBag className="mx-auto size-8 text-lilac" />
-          <h2 className="mt-3 font-display text-2xl italic text-plum-deep">No orders yet</h2>
-          <p className="mt-2 text-sm text-muted">Your placed orders will appear here with live status updates.</p>
-          <Button type="button" className="mt-5" onClick={onBack}>Browse fish</Button>
+          <h2 className="mt-3 font-display text-2xl italic text-plum-deep">You have no orders yet</h2>
+          <p className="mt-2 text-sm text-muted">
+            Orders you place will show here.
+          </p>
+          <Button type="button" className="mt-5" onClick={onBack}>
+            Choose fish
+          </Button>
         </Card>
       ) : (
         <div className="space-y-4">
-          {orders.map((order) => <OrderCard key={order.id} order={order} />)}
+          {orders.map((order) => (
+            <OrderCard key={order.id} order={order} />
+          ))}
         </div>
       )}
     </section>
@@ -407,7 +452,7 @@ function OrderCard({ order }: { order: CustomerOrder }) {
           <p className="mt-1 text-xs text-muted">{new Date(order.createdAt).toLocaleString()}</p>
         </div>
         <Badge variant={order.status === "completed" ? "ok" : cancelled ? "danger" : "warn"}>
-          {order.status}
+          {ORDER_STATUS_LABELS[order.status] ?? order.status}
         </Badge>
       </div>
       {!cancelled ? (
@@ -422,24 +467,41 @@ function OrderCard({ order }: { order: CustomerOrder }) {
                 >
                   {done ? <Check className="size-4" /> : index + 1}
                 </span>
-                <span className="mt-1 block truncate text-[10px] capitalize text-muted">{step}</span>
+                <span className="mt-1 block truncate text-[10px] text-muted">
+                  {ORDER_STATUS_LABELS[step]}
+                </span>
               </li>
             );
           })}
         </ol>
       ) : (
-        <p className="mt-4 text-sm text-muted">This order was cancelled by the fish house.</p>
+        <p className="mt-4 text-sm text-muted">
+          The fish house cancelled this order. Please contact them if you need more information.
+        </p>
       )}
       <ul className="mt-4 divide-y divide-border border-t border-border">
         {order.items.map((item, index) => (
-          <li key={`${item.fishTypeId}-${index}`} className="flex justify-between gap-3 py-2 text-sm">
-            <span>{item.fishName} · {kg(item.quantityKg)}</span>
+          <li
+            key={`${item.fishTypeId}-${index}`}
+            className="flex justify-between gap-3 py-2 text-sm"
+          >
+            <span>
+              {item.fishName} · {kg(item.quantityKg)}
+            </span>
             <span className="tabular-nums">{kes(item.unitPrice * item.quantityKg)}</span>
           </li>
         ))}
       </ul>
-      {order.note ? <p className="mt-2 text-sm text-muted">Note: {order.note}</p> : null}
+      {order.note ? <p className="mt-2 text-sm text-muted">Your note: {order.note}</p> : null}
       <div className="mt-3 border-t border-border pt-3 text-right">
+        {order.receiptNo ? (
+          <p className="mb-2 text-xs text-muted">
+            Receipt {order.receiptNo} ·{" "}
+            {order.paymentStatus === "paid"
+              ? "Payment received"
+              : "Payment still being checked"}
+          </p>
+        ) : null}
         <span className="mr-2 text-sm text-muted">Total</span>
         <span className="font-display text-xl italic text-plum-deep">{kes(order.total)}</span>
       </div>

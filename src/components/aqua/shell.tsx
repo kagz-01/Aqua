@@ -24,19 +24,39 @@ import { UserButton } from "@/lib/auth/gates";
 import { ROLE_META, type AquaRole, canSeeFinance, canSeeReports } from "@/lib/aqua/role";
 
 const NAV = [
-  { to: "/app", label: "Pulse", icon: LayoutDashboard, end: true },
-  { to: "/app/sales", label: "Sales floor", icon: Receipt },
-  { to: "/app/inventory", label: "Ice hold", icon: Fish },
-  { to: "/app/batches", label: "Batches", icon: QrCode },
-  { to: "/app/customers", label: "Counters", icon: Users },
-  { to: "/app/suppliers", label: "Landings", icon: Boxes },
-  { to: "/app/payments", label: "M-Pesa", icon: Wallet, finance: true },
-  { to: "/app/alerts", label: "Messaging desk", icon: Bell },
-  { to: "/app/cold-chain", label: "Cold chain", icon: Thermometer },
-  { to: "/app/reports", label: "Books", icon: ClipboardList, reports: true },
-  { to: "/app/orders", label: "Customer orders", icon: PackageCheck, manager: true },
-  { to: "/app/team", label: "Team access", icon: UserRoundCog, owner: true },
+  {
+    to: "/app",
+    label: "Business overview",
+    icon: LayoutDashboard,
+    end: true,
+    roles: ["owner", "manager", "accounts"],
+  },
+  { to: "/app/sales", label: "Record a sale", icon: Receipt, roles: ["owner", "floor"] },
+  { to: "/app/inventory", label: "Fish stock", icon: Fish, roles: ["owner", "manager"] },
+  {
+    to: "/app/batches",
+    label: "Fish deliveries",
+    icon: QrCode,
+    roles: ["owner", "manager", "floor"],
+  },
+  { to: "/app/customers", label: "Customers", icon: Users },
+  { to: "/app/suppliers", label: "Fishers & payments", icon: Boxes, sourcing: true },
+  { to: "/app/payments", label: "Check payments", icon: Wallet, finance: true },
+  { to: "/app/alerts", label: "Messages & alerts", icon: Bell, roles: ["owner", "manager"] },
+  {
+    to: "/app/cold-chain",
+    label: "Temperature & weighing",
+    icon: Thermometer,
+    roles: ["owner", "manager"],
+  },
+  { to: "/app/reports", label: "Reports", icon: ClipboardList, reports: true },
+  { to: "/app/orders", label: "Shop orders", icon: PackageCheck, fulfilment: true },
+  { to: "/app/team", label: "Staff access", icon: UserRoundCog, owner: true },
 ] as const;
+
+function hasRole(roles: readonly string[], role: AquaRole) {
+  return roles.some((allowedRole) => allowedRole === role);
+}
 
 function NavLinks({
   role,
@@ -50,9 +70,18 @@ function NavLinks({
   return (
     <nav className="flex flex-col gap-1">
       {NAV.filter((item) => {
+        if ("roles" in item && item.roles && !hasRole(item.roles, role)) return false;
         if ("finance" in item && item.finance && !canSeeFinance(role)) return false;
         if ("reports" in item && item.reports && !canSeeReports(role)) return false;
-        if ("manager" in item && item.manager && !canSeeFinance(role)) return false;
+        if ("sourcing" in item && item.sourcing && role === "floor") return false;
+        if (
+          "fulfilment" in item &&
+          item.fulfilment &&
+          role !== "owner" &&
+          role !== "manager" &&
+          role !== "floor"
+        )
+          return false;
         if ("owner" in item && item.owner && role !== "owner") return false;
         return true;
       }).map((item) => {
@@ -93,7 +122,9 @@ export function AppShell({ children, role }: { children: ReactNode; role: AquaRo
         </Link>
         <NavLinks role={role} pathname={pathname} />
         <div className="mt-auto rounded-lg bg-paper p-3 shadow-[var(--shadow-border)]">
-          <p className="text-[10px] font-medium tracking-[0.18em] text-muted uppercase">Desk</p>
+          <p className="text-[10px] font-medium tracking-[0.18em] text-muted uppercase">
+            Your role
+          </p>
           <p className="mt-1 font-display text-lg italic text-plum-deep">{meta.title}</p>
           <p className="text-xs text-muted">{meta.desk}</p>
         </div>
@@ -120,14 +151,16 @@ export function AppShell({ children, role }: { children: ReactNode; role: AquaRo
             </span>
             <span className="hidden items-center gap-2 text-sm text-muted lg:flex">
               <Scale className="size-4 text-plum" />
-              Dunga desk · live till
+              Aqua · Dunga Beach
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm">
-              <Link to="/client">Customer shop</Link>
+              <Link to="/client">Shop fish</Link>
             </Button>
-            <span className="hidden text-sm font-medium text-plum-deep sm:inline">{meta.title}</span>
+            <span className="hidden text-sm font-medium text-plum-deep sm:inline">
+              {meta.title}
+            </span>
             <UserButton />
           </div>
         </header>

@@ -42,37 +42,37 @@ function Reports() {
   return (
     <div>
       <PageHeader
-        eyebrow="Books"
-        title="What the house earned"
-        description="Species mix, till, and an export for the owner’s notebook."
+        eyebrow="Reports"
+        title="Sales and fish stock"
+        description="See recent sales, which fish are selling, and how much stock is left."
         action={
           <Button variant="secondary" onClick={exportCsv}>
-            Export CSV
+            Download sales list
           </Button>
         }
       />
       <div className="grid gap-3 sm:grid-cols-3">
         <Card>
-          <p className="text-[11px] tracking-wider text-muted uppercase">Week</p>
+          <p className="text-[11px] tracking-wider text-muted uppercase">Sales this week</p>
           <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">
             {kes(overview.data?.weekTotal ?? 0)}
           </p>
         </Card>
         <Card>
-          <p className="text-[11px] tracking-wider text-muted uppercase">Today</p>
+          <p className="text-[11px] tracking-wider text-muted uppercase">Sales today</p>
           <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">
             {kes(overview.data?.todayTotal ?? 0)}
           </p>
         </Card>
         <Card>
-          <p className="text-[11px] tracking-wider text-muted uppercase">Ice value</p>
+          <p className="text-[11px] tracking-wider text-muted uppercase">Value of fish in stock</p>
           <p className="mt-1 font-display text-3xl tabular-nums italic text-plum-deep">
             {kes(overview.data?.stockValue ?? 0)}
           </p>
         </Card>
       </div>
       <Card className="mt-4">
-        <h2 className="font-display text-xl italic text-plum-deep">Species, 14 days</h2>
+        <h2 className="font-display text-xl italic text-plum-deep">Fish sold in the last 14 days</h2>
         <div className="mt-4 h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={overview.data?.top ?? []}>
@@ -104,13 +104,13 @@ function Reports() {
         </div>
       </Card>
       <Card className="mt-4 overflow-x-auto">
-        <h2 className="mb-3 font-display text-xl italic text-plum-deep">Species table</h2>
+        <h2 className="mb-3 font-display text-xl italic text-plum-deep">Sales by type of fish</h2>
         <table className="w-full text-left text-sm">
           <thead className="text-[11px] tracking-wider text-muted uppercase">
             <tr>
               <th className="pb-2 font-medium">Fish</th>
-              <th className="pb-2 font-medium">Moved</th>
-              <th className="pb-2 text-right font-medium">Revenue</th>
+              <th className="pb-2 font-medium">Amount sold</th>
+              <th className="pb-2 text-right font-medium">Money made</th>
             </tr>
           </thead>
           <tbody>
