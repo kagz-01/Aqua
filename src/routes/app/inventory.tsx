@@ -25,12 +25,13 @@ import {
 } from "@/components/ui/select";
 import { listFish, listSuppliers, receiveDelivery } from "@/lib/aqua/queries";
 import { kes, kg } from "@/lib/aqua/format";
-import { canMutateStock, useAquaRole } from "@/lib/aqua/role";
+import { canMutateStock } from "@/lib/aqua/role";
+import { getMyAquaRole } from "@/lib/aqua/market";
 
 export const Route = createFileRoute("/app/inventory")({ component: Inventory });
 
 function Inventory() {
-  const role = useAquaRole((s) => s.role);
+  const role = useQuery({ queryKey: ["aqua-staff-role"], queryFn: () => getMyAquaRole() });
   const qc = useQueryClient();
   const fish = useQuery({ queryKey: ["fish"], queryFn: () => listFish() });
   const suppliers = useQuery({ queryKey: ["suppliers"], queryFn: () => listSuppliers() });
@@ -67,7 +68,7 @@ function Inventory() {
         title="What is on the ice"
         description="Kilos, reorder lines, and the season flag. Receive a landing to mint a batch QR."
         action={
-          canMutateStock(role) ? (
+          role.data && canMutateStock(role.data) ? (
             <Button onClick={() => setOpen(true)}>Receive landing</Button>
           ) : null
         }

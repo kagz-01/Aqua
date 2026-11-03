@@ -2,7 +2,6 @@ import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-r
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { AppProviders } from "@/components/providers";
-import { FloatingKnowledgeAssistant } from "@/components/aqua/shell";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Aqua";
@@ -48,7 +47,6 @@ export const Route = createRootRoute({
         <AuthProvider>
           <AppProviders>
             <Outlet />
-            <FloatingKnowledgeAssistant />
           </AppProviders>
         </AuthProvider>
         <Scripts />

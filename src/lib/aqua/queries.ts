@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getSql } from "@/lib/db";
 import { batchCode, mpesaReceipt, receiptNo } from "@/lib/aqua/format";
+import { staffOnly } from "./access";
 
 export type FishRow = {
   id: number;
@@ -125,7 +126,9 @@ export const listFish = createServerFn({ method: "GET" }).handler(async () => {
   );
 });
 
-export const listBatches = createServerFn({ method: "GET" }).handler(async () => {
+export const listBatches = createServerFn({ method: "GET" })
+  .middleware([staffOnly()])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{
     id: number;
@@ -237,7 +240,9 @@ export const getBatchByCode = createServerFn({ method: "POST" })
     };
   });
 
-export const listCustomers = createServerFn({ method: "GET" }).handler(async () => {
+export const listCustomers = createServerFn({ method: "GET" })
+  .middleware([staffOnly()])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{ id: number; code: string; kind: string; credit_balance: number }>`
     select id, code, kind, credit_balance from customers order by code`;
@@ -251,7 +256,9 @@ export const listCustomers = createServerFn({ method: "GET" }).handler(async () 
   );
 });
 
-export const listSuppliers = createServerFn({ method: "GET" }).handler(async () => {
+export const listSuppliers = createServerFn({ method: "GET" })
+  .middleware([staffOnly()])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{
     id: number;
@@ -271,7 +278,9 @@ export const listSuppliers = createServerFn({ method: "GET" }).handler(async () 
   );
 });
 
-export const listSales = createServerFn({ method: "GET" }).handler(async () => {
+export const listSales = createServerFn({ method: "GET" })
+  .middleware([staffOnly()])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{
     id: number;
@@ -306,7 +315,9 @@ export const listSales = createServerFn({ method: "GET" }).handler(async () => {
   );
 });
 
-export const listPayments = createServerFn({ method: "GET" }).handler(async () => {
+export const listPayments = createServerFn({ method: "GET" })
+  .middleware([staffOnly(["owner", "manager"])])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{
     id: number;
@@ -339,7 +350,9 @@ export const listPayments = createServerFn({ method: "GET" }).handler(async () =
   );
 });
 
-export const listNotifications = createServerFn({ method: "GET" }).handler(async () => {
+export const listNotifications = createServerFn({ method: "GET" })
+  .middleware([staffOnly(["owner", "manager"])])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{
     id: number;
@@ -364,7 +377,9 @@ export const listNotifications = createServerFn({ method: "GET" }).handler(async
   );
 });
 
-export const listSensors = createServerFn({ method: "GET" }).handler(async () => {
+export const listSensors = createServerFn({ method: "GET" })
+  .middleware([staffOnly()])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{
     id: number;
@@ -390,7 +405,9 @@ export const listSensors = createServerFn({ method: "GET" }).handler(async () =>
   );
 });
 
-export const getOverview = createServerFn({ method: "GET" }).handler(async () => {
+export const getOverview = createServerFn({ method: "GET" })
+  .middleware([staffOnly()])
+  .handler(async () => {
   const sql = await getSql();
   const today = await sql<{ total: number; count: number }>`
     select coalesce(sum(total),0)::float as total, count(*)::int as count
@@ -504,6 +521,7 @@ export const receiveDelivery = createServerFn({ method: "POST" })
     if (!(quantityKg > 0)) throw new Error("Quantity must be above 0");
     return { fishTypeId, supplierId, quantityKg, tempC, landingSite };
   })
+  .middleware([staffOnly(["owner", "manager"])])
   .handler(async ({ data }) => {
     const sql = await getSql();
     const code = batchCode(data.landingSite);
@@ -541,6 +559,7 @@ export const recordSale = createServerFn({ method: "POST" })
     if (!items.length) throw new Error("Add at least one fish line");
     return { customerId, method, items };
   })
+  .middleware([staffOnly()])
   .handler(async ({ data }) => {
     const sql = await getSql();
     const fishRows = await sql<{ id: number; name: string; price_per_kg: number; quantity_kg: number }>`
@@ -615,6 +634,7 @@ export const confirmMpesa = createServerFn({ method: "POST" })
     if (!saleId) throw new Error("Missing sale");
     return { saleId };
   })
+  .middleware([staffOnly(["owner", "manager"])])
   .handler(async ({ data }) => {
     const sql = await getSql();
     const rec = mpesaReceipt();
@@ -638,6 +658,7 @@ export const addCustomer = createServerFn({ method: "POST" })
     if (code.length < 3) throw new Error("Use a counter name of at least 3 letters");
     return { code, kind };
   })
+  .middleware([staffOnly()])
   .handler(async ({ data }) => {
     const sql = await getSql();
     await sql`insert into customers (code, kind) values (${data.code}, ${data.kind})`;
@@ -655,6 +676,7 @@ export const addSupplier = createServerFn({ method: "POST" })
     if (!code || !landingSite) throw new Error("Landing site and code are required");
     return { code, landingSite, boatOrCoop };
   })
+  .middleware([staffOnly(["owner", "manager"])])
   .handler(async ({ data }) => {
     const sql = await getSql();
     await sql`insert into suppliers (code, landing_site, boat_or_coop, reliability)
@@ -674,6 +696,7 @@ export const sendAlert = createServerFn({ method: "POST" })
     if (message.length < 4) throw new Error("Write a short alert");
     return { channel, kind, recipientCode, message };
   })
+  .middleware([staffOnly(["owner", "manager"])])
   .handler(async ({ data }) => {
     const sql = await getSql();
     await sql`insert into notifications (channel, kind, recipient_code, message, status)
@@ -681,7 +704,9 @@ export const sendAlert = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const tickSensors = createServerFn({ method: "POST" }).handler(async () => {
+export const tickSensors = createServerFn({ method: "POST" })
+  .middleware([staffOnly(["owner", "manager"])])
+  .handler(async () => {
   const sql = await getSql();
   const rows = await sql<{ id: number; kind: string; value: number; code: string }>`
     select id, kind, value, code from sensors`;
@@ -714,6 +739,7 @@ export const weighIn = createServerFn({ method: "POST" })
     if (!fishTypeId || !supplierId || !(kg > 0)) throw new Error("Scale needs fish, supplier, and a weight");
     return { fishTypeId, supplierId, kg };
   })
+  .middleware([staffOnly()])
   .handler(async ({ data }) => {
     const sql = await getSql();
     const sup = await sql<{ landing_site: string }>`select landing_site from suppliers where id = ${data.supplierId}`;

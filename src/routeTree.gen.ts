@@ -11,18 +11,27 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as ClientRouteImport } from './routes/client'
 import { Route as EnterRouteImport } from './routes/enter'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppAlertsRouteImport } from './routes/app/alerts'
 import { Route as AppBatchesRouteImport } from './routes/app/batches'
 import { Route as AppColdChainRouteImport } from './routes/app/cold-chain'
 import { Route as AppCustomersRouteImport } from './routes/app/customers'
 import { Route as AppInventoryRouteImport } from './routes/app/inventory'
+import { Route as AppOrdersRouteImport } from './routes/app/orders'
 import { Route as AppPaymentsRouteImport } from './routes/app/payments'
 import { Route as AppReportsRouteImport } from './routes/app/reports'
 import { Route as AppSalesRouteImport } from './routes/app/sales'
 import { Route as AppSuppliersRouteImport } from './routes/app/suppliers'
+import { Route as AppTeamRouteImport } from './routes/app/team'
+import { Route as StaffIndexRouteImport } from './routes/staff/index'
+import { Route as StaffAttendantRouteImport } from './routes/staff/attendant'
+import { Route as StaffHousemanagerRouteImport } from './routes/staff/housemanager'
+import { Route as StaffOwnerRouteImport } from './routes/staff/owner'
 import { Route as TraceCodeRouteImport } from './routes/trace.$code'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,9 +43,19 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientRoute = ClientRouteImport.update({
+  id: '/client',
+  path: '/client',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnterRoute = EnterRouteImport.update({
   id: '/enter',
   path: '/enter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -69,6 +88,11 @@ const AppInventoryRoute = AppInventoryRouteImport.update({
   path: '/inventory',
   getParentRoute: () => AppRoute,
 } as any)
+const AppOrdersRoute = AppOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPaymentsRoute = AppPaymentsRouteImport.update({
   id: '/payments',
   path: '/payments',
@@ -89,115 +113,206 @@ const AppSuppliersRoute = AppSuppliersRouteImport.update({
   path: '/suppliers',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
+const StaffIndexRoute = StaffIndexRouteImport.update({
+  id: '/staff/',
+  path: '/staff/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAttendantRoute = StaffAttendantRouteImport.update({
+  id: '/staff/attendant',
+  path: '/staff/attendant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffHousemanagerRoute = StaffHousemanagerRouteImport.update({
+  id: '/staff/housemanager',
+  path: '/staff/housemanager',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffOwnerRoute = StaffOwnerRouteImport.update({
+  id: '/staff/owner',
+  path: '/staff/owner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TraceCodeRoute = TraceCodeRouteImport.update({
   id: '/trace/$code',
   path: '/trace/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/client': typeof ClientRoute
   '/enter': typeof EnterRoute
+  '/login': typeof LoginRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/batches': typeof AppBatchesRoute
   '/app/cold-chain': typeof AppColdChainRoute
   '/app/customers': typeof AppCustomersRoute
   '/app/inventory': typeof AppInventoryRoute
+  '/app/orders': typeof AppOrdersRoute
   '/app/payments': typeof AppPaymentsRoute
   '/app/reports': typeof AppReportsRoute
   '/app/sales': typeof AppSalesRoute
   '/app/suppliers': typeof AppSuppliersRoute
+  '/app/team': typeof AppTeamRoute
+  '/staff/attendant': typeof StaffAttendantRoute
+  '/staff/housemanager': typeof StaffHousemanagerRoute
+  '/staff/owner': typeof StaffOwnerRoute
   '/trace/$code': typeof TraceCodeRoute
   '/app/': typeof AppIndexRoute
+  '/staff/': typeof StaffIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/client': typeof ClientRoute
   '/enter': typeof EnterRoute
+  '/login': typeof LoginRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/batches': typeof AppBatchesRoute
   '/app/cold-chain': typeof AppColdChainRoute
   '/app/customers': typeof AppCustomersRoute
   '/app/inventory': typeof AppInventoryRoute
+  '/app/orders': typeof AppOrdersRoute
   '/app/payments': typeof AppPaymentsRoute
   '/app/reports': typeof AppReportsRoute
   '/app/sales': typeof AppSalesRoute
   '/app/suppliers': typeof AppSuppliersRoute
+  '/app/team': typeof AppTeamRoute
+  '/staff/attendant': typeof StaffAttendantRoute
+  '/staff/housemanager': typeof StaffHousemanagerRoute
+  '/staff/owner': typeof StaffOwnerRoute
   '/trace/$code': typeof TraceCodeRoute
   '/app': typeof AppIndexRoute
+  '/staff': typeof StaffIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/client': typeof ClientRoute
   '/enter': typeof EnterRoute
+  '/login': typeof LoginRoute
   '/app/alerts': typeof AppAlertsRoute
   '/app/batches': typeof AppBatchesRoute
   '/app/cold-chain': typeof AppColdChainRoute
   '/app/customers': typeof AppCustomersRoute
   '/app/inventory': typeof AppInventoryRoute
+  '/app/orders': typeof AppOrdersRoute
   '/app/payments': typeof AppPaymentsRoute
   '/app/reports': typeof AppReportsRoute
   '/app/sales': typeof AppSalesRoute
   '/app/suppliers': typeof AppSuppliersRoute
+  '/app/team': typeof AppTeamRoute
+  '/staff/attendant': typeof StaffAttendantRoute
+  '/staff/housemanager': typeof StaffHousemanagerRoute
+  '/staff/owner': typeof StaffOwnerRoute
   '/trace/$code': typeof TraceCodeRoute
   '/app/': typeof AppIndexRoute
+  '/staff/': typeof StaffIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/app'
+    | '/client'
     | '/enter'
+    | '/login'
     | '/app/alerts'
     | '/app/batches'
     | '/app/cold-chain'
     | '/app/customers'
     | '/app/inventory'
+    | '/app/orders'
     | '/app/payments'
     | '/app/reports'
     | '/app/sales'
     | '/app/suppliers'
+    | '/app/team'
+    | '/staff/attendant'
+    | '/staff/housemanager'
+    | '/staff/owner'
     | '/trace/$code'
     | '/app/'
+    | '/staff/'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/client'
     | '/enter'
+    | '/login'
     | '/app/alerts'
     | '/app/batches'
     | '/app/cold-chain'
     | '/app/customers'
     | '/app/inventory'
+    | '/app/orders'
     | '/app/payments'
     | '/app/reports'
     | '/app/sales'
     | '/app/suppliers'
+    | '/app/team'
+    | '/staff/attendant'
+    | '/staff/housemanager'
+    | '/staff/owner'
     | '/trace/$code'
     | '/app'
+    | '/staff'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
     | '/app'
+    | '/client'
     | '/enter'
+    | '/login'
     | '/app/alerts'
     | '/app/batches'
     | '/app/cold-chain'
     | '/app/customers'
     | '/app/inventory'
+    | '/app/orders'
     | '/app/payments'
     | '/app/reports'
     | '/app/sales'
     | '/app/suppliers'
+    | '/app/team'
+    | '/staff/attendant'
+    | '/staff/housemanager'
+    | '/staff/owner'
     | '/trace/$code'
     | '/app/'
+    | '/staff/'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  ClientRoute: typeof ClientRoute
   EnterRoute: typeof EnterRoute
+  LoginRoute: typeof LoginRoute
+  StaffAttendantRoute: typeof StaffAttendantRoute
+  StaffHousemanagerRoute: typeof StaffHousemanagerRoute
+  StaffOwnerRoute: typeof StaffOwnerRoute
   TraceCodeRoute: typeof TraceCodeRoute
+  StaffIndexRoute: typeof StaffIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -216,11 +331,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/client': {
+      id: '/client'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof ClientRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/enter': {
       id: '/enter'
       path: '/enter'
       fullPath: '/enter'
       preLoaderRoute: typeof EnterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -265,6 +394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppInventoryRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/orders': {
+      id: '/app/orders'
+      path: '/orders'
+      fullPath: '/app/orders'
+      preLoaderRoute: typeof AppOrdersRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/payments': {
       id: '/app/payments'
       path: '/payments'
@@ -293,11 +429,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSuppliersRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/team': {
+      id: '/app/team'
+      path: '/team'
+      fullPath: '/app/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/staff/': {
+      id: '/staff/'
+      path: '/staff'
+      fullPath: '/staff/'
+      preLoaderRoute: typeof StaffIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/attendant': {
+      id: '/staff/attendant'
+      path: '/staff/attendant'
+      fullPath: '/staff/attendant'
+      preLoaderRoute: typeof StaffAttendantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/housemanager': {
+      id: '/staff/housemanager'
+      path: '/staff/housemanager'
+      fullPath: '/staff/housemanager'
+      preLoaderRoute: typeof StaffHousemanagerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/owner': {
+      id: '/staff/owner'
+      path: '/staff/owner'
+      fullPath: '/staff/owner'
+      preLoaderRoute: typeof StaffOwnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trace/$code': {
       id: '/trace/$code'
       path: '/trace/$code'
       fullPath: '/trace/$code'
       preLoaderRoute: typeof TraceCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -309,10 +487,12 @@ interface AppRouteChildren {
   AppColdChainRoute: typeof AppColdChainRoute
   AppCustomersRoute: typeof AppCustomersRoute
   AppInventoryRoute: typeof AppInventoryRoute
+  AppOrdersRoute: typeof AppOrdersRoute
   AppPaymentsRoute: typeof AppPaymentsRoute
   AppReportsRoute: typeof AppReportsRoute
   AppSalesRoute: typeof AppSalesRoute
   AppSuppliersRoute: typeof AppSuppliersRoute
+  AppTeamRoute: typeof AppTeamRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
@@ -322,10 +502,12 @@ const AppRouteChildren: AppRouteChildren = {
   AppColdChainRoute: AppColdChainRoute,
   AppCustomersRoute: AppCustomersRoute,
   AppInventoryRoute: AppInventoryRoute,
+  AppOrdersRoute: AppOrdersRoute,
   AppPaymentsRoute: AppPaymentsRoute,
   AppReportsRoute: AppReportsRoute,
   AppSalesRoute: AppSalesRoute,
   AppSuppliersRoute: AppSuppliersRoute,
+  AppTeamRoute: AppTeamRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -334,8 +516,15 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  ClientRoute: ClientRoute,
   EnterRoute: EnterRoute,
+  LoginRoute: LoginRoute,
+  StaffAttendantRoute: StaffAttendantRoute,
+  StaffHousemanagerRoute: StaffHousemanagerRoute,
+  StaffOwnerRoute: StaffOwnerRoute,
   TraceCodeRoute: TraceCodeRoute,
+  StaffIndexRoute: StaffIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

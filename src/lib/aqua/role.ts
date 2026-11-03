@@ -35,7 +35,7 @@ export const useAquaRole = create<RoleState>()(
       role: "owner",
       setRole: (role) => set({ role }),
     }),
-    { name: "aqua-role" },
+    { name: "aqua-role-demo" },
   ),
 );
 

@@ -7,26 +7,21 @@ import {
   Fish,
   LayoutDashboard,
   Menu,
+  PackageCheck,
   QrCode,
-  Radio,
   Receipt,
   Scale,
   Thermometer,
   Users,
+  UserRoundCog,
   Wallet,
 } from "lucide-react";
 import { AquaLogo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { ROLE_META, useAquaRole, type AquaRole, canSeeFinance, canSeeReports } from "@/lib/aqua/role";
+import { UserButton } from "@/lib/auth/gates";
+import { ROLE_META, type AquaRole, canSeeFinance, canSeeReports } from "@/lib/aqua/role";
 
 const NAV = [
   { to: "/app", label: "Pulse", icon: LayoutDashboard, end: true },
@@ -39,6 +34,8 @@ const NAV = [
   { to: "/app/alerts", label: "Messaging desk", icon: Bell },
   { to: "/app/cold-chain", label: "Cold chain", icon: Thermometer },
   { to: "/app/reports", label: "Books", icon: ClipboardList, reports: true },
+  { to: "/app/orders", label: "Customer orders", icon: PackageCheck, manager: true },
+  { to: "/app/team", label: "Team access", icon: UserRoundCog, owner: true },
 ] as const;
 
 function NavLinks({
@@ -55,6 +52,8 @@ function NavLinks({
       {NAV.filter((item) => {
         if ("finance" in item && item.finance && !canSeeFinance(role)) return false;
         if ("reports" in item && item.reports && !canSeeReports(role)) return false;
+        if ("manager" in item && item.manager && !canSeeFinance(role)) return false;
+        if ("owner" in item && item.owner && role !== "owner") return false;
         return true;
       }).map((item) => {
         const active =
@@ -81,10 +80,8 @@ function NavLinks({
   );
 }
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, role }: { children: ReactNode; role: AquaRole }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const role = useAquaRole((s) => s.role);
-  const setRole = useAquaRole((s) => s.setRole);
   const [open, setOpen] = useState(false);
   const meta = ROLE_META[role];
 
@@ -128,29 +125,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm">
-              <Link to="/">Home</Link>
+              <Link to="/client">Customer shop</Link>
             </Button>
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/enter">Back to desk</Link>
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="secondary" size="sm">
-                  {meta.title}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Switch desk</DropdownMenuLabel>
-                {(Object.keys(ROLE_META) as AquaRole[]).map((key) => (
-                  <DropdownMenuItem key={key} onSelect={() => setRole(key)}>
-                    {ROLE_META[key].title}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <span className="flex size-9 items-center justify-center rounded-md bg-plum font-display text-sm text-cream italic">
-              {meta.title.slice(0, 1)}
-            </span>
+            <span className="hidden text-sm font-medium text-plum-deep sm:inline">{meta.title}</span>
+            <UserButton />
           </div>
         </header>
         <div className="px-4 py-6 sm:px-6 lg:px-8">{children}</div>

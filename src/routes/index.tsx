@@ -590,12 +590,17 @@ function Home() {
               </button>
             ))}
           </nav>
-          <Button asChild size="sm">
-            <Link to="/enter">
-              Open the house
-              <ArrowRight className="size-4" />
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button asChild size="sm" variant="secondary">
+              <Link to="/client">Shop fish</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link to="/enter">
+                Open the house
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </header>
 
